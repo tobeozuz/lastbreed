@@ -1760,6 +1760,204 @@
     /* Fix footer */
     footer { display: grid !important; grid-template-columns: 1fr 1fr; }
   }
+
+  /* ─── SIZE PICKER MODAL ─────────────────────────── */
+  .size-pick-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 3000;
+    backdrop-filter: blur(4px);
+  }
+  .size-pick-backdrop.open { display: block; }
+
+  .size-pick-modal {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.96);
+    z-index: 3001; width: min(420px, 95vw);
+    background: #111; border: 1px solid var(--grey);
+    padding: 40px 36px 32px;
+    opacity: 0; transition: opacity 0.25s, transform 0.25s;
+    display: none;
+  }
+  .size-pick-modal.open { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .size-pick-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; color: var(--light-grey);
+    font-size: 1rem; cursor: crosshair;
+  }
+  .size-pick-product {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+  }
+  .size-pick-thumb {
+    width: 56px; height: 56px; object-fit: cover;
+    object-position: center top; flex-shrink: 0;
+  }
+  .size-pick-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; letter-spacing: 0.05em;
+  }
+  .size-pick-price {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem; color: var(--khaki); margin-top: 2px;
+  }
+  .size-pick-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.58rem; letter-spacing: 0.3em;
+    color: var(--light-grey); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .size-pick-sizes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .size-pick-btn {
+    background: none; border: 1px solid var(--grey);
+    color: var(--light-grey);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 0.1em;
+    width: 50px; height: 44px; cursor: crosshair;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .size-pick-btn:hover { border-color: var(--white); color: var(--white); }
+  .size-pick-btn.active { border-color: var(--white); color: var(--black); background: var(--white); }
+  .size-pick-confirm {
+    width: 100%; background: var(--red); color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase;
+    border: none; padding: 14px; cursor: crosshair;
+    transition: background 0.2s;
+  }
+  .size-pick-confirm:hover { background: var(--rust); }
+
+  /* ─── CART DRAWER ───────────────────────────────── */
+  .cart-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7); z-index: 3500;
+  }
+  .cart-backdrop.open { display: block; }
+
+  .cart-drawer {
+    position: fixed; top: 0; right: -440px; bottom: 0;
+    width: min(420px, 100vw);
+    background: #111; border-left: 1px solid var(--grey);
+    z-index: 3501; display: flex; flex-direction: column;
+    transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  .cart-drawer.open { right: 0; }
+
+  .cart-header {
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid var(--grey);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+  }
+  .cart-header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 0.08em;
+  }
+  .cart-header-count {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem; color: var(--red); letter-spacing: 0.2em;
+  }
+  .cart-close-btn {
+    background: none; border: none; color: var(--light-grey);
+    font-size: 1.1rem; cursor: crosshair; transition: color 0.2s;
+  }
+  .cart-close-btn:hover { color: var(--white); }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 20px 28px; }
+
+  .cart-empty {
+    text-align: center; padding: 60px 0; color: var(--grey);
+  }
+  .cart-empty-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.3; }
+  .cart-empty-text {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+
+  .cart-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 16px 0; border-bottom: 1px solid #1a1a1a;
+  }
+  .cart-item:last-child { border-bottom: none; }
+  .cart-item-img {
+    width: 70px; height: 85px; object-fit: cover;
+    object-position: center top; flex-shrink: 0;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; letter-spacing: 0.05em; margin-bottom: 2px;
+  }
+  .cart-item-size {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem; color: var(--khaki); letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .cart-item-qty {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cart-qty-btn {
+    background: #1a1a1a; border: 1px solid var(--grey);
+    color: var(--white); width: 28px; height: 28px;
+    font-size: 1rem; cursor: crosshair;
+    transition: border-color 0.2s; line-height: 1;
+  }
+  .cart-qty-btn:hover { border-color: var(--white); }
+  .cart-qty-num {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.8rem; min-width: 20px; text-align: center;
+  }
+  .cart-item-price {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem; color: var(--white); white-space: nowrap;
+  }
+  .cart-item-remove {
+    background: none; border: none; color: var(--grey);
+    font-size: 0.7rem; cursor: crosshair; padding: 4px;
+    transition: color 0.2s; align-self: flex-start;
+  }
+  .cart-item-remove:hover { color: var(--red); }
+
+  .cart-footer {
+    padding: 20px 28px 32px;
+    border-top: 1px solid var(--grey); flex-shrink: 0;
+    background: #0f0f0f;
+  }
+  .cart-subtotal {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .cart-subtotal-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    color: var(--light-grey); text-transform: uppercase;
+  }
+  .cart-subtotal-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; color: var(--khaki);
+  }
+  .cart-note {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.58rem; color: var(--grey);
+    margin-bottom: 16px; letter-spacing: 0.1em;
+  }
+  .cart-checkout-btn {
+    width: 100%; background: var(--red); color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 0.9rem; letter-spacing: 0.3em; text-transform: uppercase;
+    border: none; padding: 16px; cursor: crosshair;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .cart-checkout-btn:hover { background: var(--rust); transform: translateY(-1px); }
+  .cart-checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* Cart count badge on nav */
+  #navCartLink { position: relative; }
+  .cart-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--red); color: var(--white);
+    font-size: 0.5rem; font-family: monospace;
+    width: 14px; height: 14px; border-radius: 50%;
+    margin-left: 2px; vertical-align: super;
+  }
 </style>
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -1768,6 +1966,33 @@
 
 <!-- GLOBAL BACKGROUND LAYERS -->
 <canvas id="bgCanvas"></canvas>
+<script>
+// ── ANIMATED FILM GRAIN CANVAS ─────────────────────────
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  function drawNoise() {
+    const tileW = Math.ceil(w / 2);
+    const tileH = Math.ceil(h / 2);
+    const img = ctx.createImageData(tileW, tileH);
+    const d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const v = (Math.random() * 255) | 0;
+      d[i] = v; d[i+1] = v; d[i+2] = v; d[i+3] = 20;
+    }
+    ctx.putImageData(img, 0, 0);
+    ctx.drawImage(canvas, 0, 0, tileW, tileH, 0, 0, w, h);
+    requestAnimationFrame(drawNoise);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  drawNoise();
+})();
+</script>
+
 <div class="bg-grid"></div>
 <div class="bg-vignette"></div>
 
@@ -1779,7 +2004,7 @@
   <ul class="nav-links">
     <li><a href="#collection">Collection</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#">Cart (0)</a></li>
+    <li><a href="#" onclick="openCart(); return false;" id="navCartLink">Cart (<span id="navCartCount">0</span>)</a></li>
   </ul>
 </nav>
 
@@ -1867,7 +2092,7 @@
         <p class="product-tag">Tops</p>
         <p class="product-name">NoFace Tee</p>
         <p class="product-price">&#8358;18,000</p>
-        <button class="order-btn" onclick="openOrder('noface')">Order Now</button>
+        <button class="order-btn" onclick="openAddToCart('noface')">Add to Cart</button>
       </div>
     </div>
 
@@ -1880,7 +2105,7 @@
         <p class="product-tag">Tops</p>
         <p class="product-name">One Of One Tee</p>
         <p class="product-price">&#8358;18,000</p>
-        <button class="order-btn" onclick="openOrder('oneofone')">Order Now</button>
+        <button class="order-btn" onclick="openAddToCart('oneofone')">Add to Cart</button>
       </div>
     </div>
 
@@ -1893,7 +2118,7 @@
         <p class="product-tag">Outerwear</p>
         <p class="product-name">LB Quarter-Zip</p>
         <p class="product-price">&#8358;21,000</p>
-        <button class="order-btn" onclick="openOrder('quartzip')">Order Now</button>
+        <button class="order-btn" onclick="openAddToCart('quartzip')">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -1940,9 +2165,9 @@
   <div class="footer-col reveal" style="transition-delay:0.2s">
     <h4>Contact</h4>
     <div class="footer-socials" style="flex-direction:column; gap:12px;">
-      <a href="#">Instagram</a>
-      <a href="#">TikTok</a>
-      <a href="#">Twitter</a>
+      <a href="https://instagram.com/thelastbreed_" target="_blank">Instagram</a>
+      <a href="https://tiktok.com/@lastbreedclothing" target="_blank">TikTok</a>
+      <a href="https://x.com/lastbreed_01" target="_blank">Twitter / X</a>
     </div>
   </div>
 </footer>
@@ -1951,122 +2176,7 @@
   <p class="footer-copy">© 2026 LAST BREED. ALL RIGHTS RESERVED.</p>
 </div>
 
-<script>
-  // ── ANIMATED FILM GRAIN CANVAS ─────────────────────────
-  (function() {
-    const canvas = document.getElementById('bgCanvas');
-    const ctx = canvas.getContext('2d');
-    let w, h;
 
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-
-    function drawNoise() {
-      const tileW = Math.ceil(w / 2);
-      const tileH = Math.ceil(h / 2);
-      const img = ctx.createImageData(tileW, tileH);
-      const d = img.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const v = (Math.random() * 255) | 0;
-        d[i] = v; d[i+1] = v; d[i+2] = v;
-        d[i+3] = 20;
-      }
-      ctx.putImageData(img, 0, 0);
-      ctx.drawImage(canvas, 0, 0, tileW, tileH, 0, 0, w, h);
-      requestAnimationFrame(drawNoise);
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-    drawNoise();
-  })();
-
-  // ── CUSTOM CURSOR ──────────────────────────────────────
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-
-  document.querySelectorAll('a, button, .product-card, .drop-item').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
-  });
-
-  // ── SCROLL REVEALS ─────────────────────────────────────
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
-  reveals.forEach(el => observer.observe(el));
-
-  // On mobile: immediately show all reveals (iOS Safari IntersectionObserver can be unreliable)
-  if (window.innerWidth <= 768) {
-    reveals.forEach(el => el.classList.add('visible'));
-  }
-
-  
-
-  function openPreorder() {
-    document.getElementById('poBackdrop').classList.add('open');
-    const modal = document.getElementById('poModal');
-    modal.style.display = 'grid';
-    requestAnimationFrame(() => modal.classList.add('open'));
-    document.body.style.overflow = 'hidden';
-    if (hasRegistered) {
-      document.getElementById('poForm').style.display = 'none';
-      document.getElementById('poSuccess').style.display = 'block';
-    } else {
-      document.getElementById('poForm').style.display = 'block';
-      document.getElementById('poSuccess').style.display = 'none';
-    }
-  }
-
-  function closePreorder() {
-    document.getElementById('poBackdrop').classList.remove('open');
-    const modal = document.getElementById('poModal');
-    modal.classList.remove('open');
-    setTimeout(() => { modal.style.display = 'none'; }, 300);
-    document.body.style.overflow = '';
-  }
-
-  function selectSize(el) {
-    document.querySelectorAll('.po-size').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    selectedSize = el.textContent;
-  }
-
-  function submitPreorder() {
-    const email = document.getElementById('poEmail').value.trim();
-    if (!email || !email.includes('@')) {
-      document.getElementById('poEmail').style.borderColor = 'var(--red)';
-      document.getElementById('poEmail').placeholder = 'Enter a valid email';
-      return;
-    }
-    if (!selectedSize) {
-      document.querySelectorAll('.po-size').forEach(b => b.style.borderColor = 'var(--red)');
-      setTimeout(() => document.querySelectorAll('.po-size').forEach(b => b.style.borderColor = ''), 1200);
-      return;
-    }
-    preorderCount++;
-    localStorage.setItem(STORAGE_KEY, preorderCount);
-    localStorage.setItem('lb_qz_registered', 'true');
-    hasRegistered = true;
-    updateDemandUI();
-    let displayed = preorderCount - 1;
-    const tick = setInterval(() => {
-      displayed++;
-      document.getElementById('poCounter').textContent = displayed;
-      if (displayed >= preorderCount) clearInterval(tick);
-    }, 80);
-    document.getElementById('poForm').style.display = 'none';
-    document.getElementById('poSuccess').style.display = 'block';
-  }
-</script>
 
 <!-- ORDER MODAL -->
 <div class="order-backdrop" id="orderBackdrop" onclick="closeOrder()"></div>
@@ -2190,63 +2300,285 @@
 
 <button class="dash-trigger" onclick="openDash()">admin</button>
 
+
+
+<!-- SIZE PICKER -->
+<div class="size-pick-backdrop" id="sizePickBackdrop" onclick="closeSizePick()"></div>
+<div class="size-pick-modal" id="sizePickModal">
+  <button class="size-pick-close" onclick="closeSizePick()">✕</button>
+  <div class="size-pick-product">
+    <img class="size-pick-thumb" id="sizePickThumb" src="" alt="" />
+    <div>
+      <div class="size-pick-name" id="sizePickName">—</div>
+      <div class="size-pick-price" id="sizePickPrice">—</div>
+    </div>
+  </div>
+  <p class="size-pick-label">Select Size</p>
+  <div class="size-pick-sizes">
+    <button class="size-pick-btn" onclick="selectPickSize(this)">M</button>
+    <button class="size-pick-btn" onclick="selectPickSize(this)">L</button>
+    <button class="size-pick-btn" onclick="selectPickSize(this)">XL</button>
+    <button class="size-pick-btn" onclick="selectPickSize(this)">XXL</button>
+  </div>
+  <button class="size-pick-confirm" onclick="confirmAddToCart()">Add to Cart</button>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div>
+      <div class="cart-header-title">Your Cart</div>
+      <div class="cart-header-count" id="cartHeaderCount">0 ITEMS</div>
+    </div>
+    <button class="cart-close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">◻</div>
+      <div class="cart-empty-text">Your cart is empty</div>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Subtotal</span>
+      <span class="cart-subtotal-amount" id="cartTotal">₦0</span>
+    </div>
+    <p class="cart-note">Shipping calculated at checkout</p>
+    <button class="cart-checkout-btn" id="cartCheckoutBtn" onclick="startCartCheckout()" disabled>
+      Proceed to Checkout
+    </button>
+  </div>
+</div>
+
 <script>
-// ── PRODUCT DATA ───────────────────────────────────────────────
+// ── PRODUCT DATA ──────────────────────────────────────────────
 const PRODUCTS = {
   noface: {
     name: 'NoFace Tee',
     price: 18000,
     currency: 'NGN',
     tag: 'Tops',
-    thumb: document.querySelector('.product-card:nth-child(1) .product-img')?.src || ''
+    get thumb() { return document.querySelector('.product-card:nth-child(1) .product-img')?.src || ''; }
   },
   oneofone: {
     name: 'One Of One Tee',
     price: 18000,
     currency: 'NGN',
     tag: 'Tops',
-    thumb: document.querySelector('.product-card:nth-child(2) .product-img')?.src || ''
+    get thumb() { return document.querySelector('.product-card:nth-child(2) .product-img')?.src || ''; }
   },
   quartzip: {
     name: 'LB Quarter-Zip',
     price: 21000,
     currency: 'NGN',
     tag: 'Outerwear',
-    thumb: document.querySelector('.product-card:nth-child(3) .product-img')?.src || ''
+    get thumb() { return document.querySelector('.product-card:nth-child(3) .product-img')?.src || ''; }
   }
 };
 
-// ── CONFIG ─────────────────────────────────────────────────────
+// ── CONFIG ────────────────────────────────────────────────────
 const PAYSTACK_PUBLIC_KEY = 'pk_live_c88909148ec15f2069b637b23c5e85adb01db726';
-const EMAILJS_SERVICE_ID  = 'REPLACE_WITH_EMAILJS_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'REPLACE_WITH_EMAILJS_TEMPLATE_ID';
-const EMAILJS_PUBLIC_KEY  = 'REPLACE_WITH_EMAILJS_PUBLIC_KEY';
 const ADMIN_EMAIL         = 'tobsozuz@gmail.com';
 const DASH_PASSWORD       = 'lastbreed2026';
 const ORDERS_KEY          = 'lb_orders_v1';
+const CART_KEY            = 'lb_cart_v1';
 
-let currentProduct = null;
-let currentSize    = null;
+// ── CART STATE ────────────────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+let sizePickProduct = null;
+let sizePickSize = null;
+let checkoutName = '';
+let checkoutEmail = '';
+let checkoutPhone = '';
+let checkoutAddress = '';
 
-// ── ORDER MODAL ────────────────────────────────────────────────
-function openOrder(productKey) {
-  currentProduct = PRODUCTS[productKey];
-  currentSize = null;
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateCartUI();
+}
 
-  document.querySelectorAll('.order-size').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.order-input').forEach(i => { i.value = ''; i.classList.remove('error'); });
+function updateCartUI() {
+  const total = cart.reduce((s, i) => s + i.qty, 0);
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+  // Nav count
+  document.getElementById('navCartCount').textContent = total;
+
+  // Header count
+  document.getElementById('cartHeaderCount').textContent = total + ' ITEM' + (total !== 1 ? 'S' : '');
+
+  // Total
+  document.getElementById('cartTotal').textContent = '₦' + subtotal.toLocaleString();
+
+  // Checkout btn
+  document.getElementById('cartCheckoutBtn').disabled = cart.length === 0;
+
+  // Items
+  const container = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+
+  if (cart.length === 0) {
+    empty.style.display = 'block';
+    // Remove all item divs
+    container.querySelectorAll('.cart-item').forEach(el => el.remove());
+    return;
+  }
+
+  empty.style.display = 'none';
+  container.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+  cart.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img class="cart-item-img" src="${item.thumb}" alt="${item.name}" />
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-size">Size: ${item.size}</div>
+        <div class="cart-item-qty">
+          <button class="cart-qty-btn" data-idx="${idx}" data-delta="-1">−</button>
+          <span class="cart-qty-num">${item.qty}</span>
+          <button class="cart-qty-btn" data-idx="${idx}" data-delta="1">+</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <span class="cart-item-price">₦${(item.price * item.qty).toLocaleString()}</span>
+        <button class="cart-item-remove" data-idx="${idx}">✕ Remove</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function changeQty(idx, delta) {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart();
+}
+
+function removeFromCart(idx) {
+  cart.splice(idx, 1);
+  saveCart();
+}
+
+// ── CART EVENT DELEGATION ────────────────────────────────────
+document.addEventListener('click', function(e) {
+  const qtyBtn = e.target.closest('.cart-qty-btn[data-idx]');
+  const removeBtn = e.target.closest('.cart-item-remove[data-idx]');
+  if (qtyBtn) {
+    changeQty(parseInt(qtyBtn.dataset.idx), parseInt(qtyBtn.dataset.delta));
+  }
+  if (removeBtn) {
+    removeFromCart(parseInt(removeBtn.dataset.idx));
+  }
+});
+
+// ── SIZE PICKER ───────────────────────────────────────────────
+function openAddToCart(productKey) {
+  sizePickProduct = { key: productKey, ...PRODUCTS[productKey] };
+  sizePickSize = null;
+
+  document.querySelectorAll('.size-pick-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sizePickName').textContent = sizePickProduct.name;
+  document.getElementById('sizePickPrice').textContent = '₦' + sizePickProduct.price.toLocaleString();
+  document.getElementById('sizePickThumb').src = sizePickProduct.thumb;
+
+  document.getElementById('sizePickBackdrop').classList.add('open');
+  const modal = document.getElementById('sizePickModal');
+  modal.style.display = 'block';
+  requestAnimationFrame(() => modal.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSizePick() {
+  document.getElementById('sizePickBackdrop').classList.remove('open');
+  const modal = document.getElementById('sizePickModal');
+  modal.classList.remove('open');
+  setTimeout(() => { modal.style.display = 'none'; }, 250);
+  document.body.style.overflow = '';
+}
+
+function selectPickSize(el) {
+  document.querySelectorAll('.size-pick-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  sizePickSize = el.textContent;
+}
+
+function confirmAddToCart() {
+  if (!sizePickSize) {
+    document.querySelectorAll('.size-pick-btn').forEach(b => b.style.borderColor = 'var(--red)');
+    setTimeout(() => document.querySelectorAll('.size-pick-btn').forEach(b => b.style.borderColor = ''), 1200);
+    return;
+  }
+
+  // Check if same product + size already in cart
+  const existing = cart.find(i => i.key === sizePickProduct.key && i.size === sizePickSize);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({
+      key: sizePickProduct.key,
+      name: sizePickProduct.name,
+      price: sizePickProduct.price,
+      size: sizePickSize,
+      thumb: sizePickProduct.thumb,
+      qty: 1
+    });
+  }
+
+  saveCart();
+  closeSizePick();
+
+  // Open cart drawer after short delay
+  setTimeout(() => openCart(), 300);
+}
+
+// ── CART DRAWER ───────────────────────────────────────────────
+function openCart() {
+  updateCartUI();
+  document.getElementById('cartBackdrop').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartBackdrop').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── CHECKOUT ──────────────────────────────────────────────────
+function startCartCheckout() {
+  if (cart.length === 0) return;
+
+  // Build checkout modal dynamically
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+  // Reuse order modal for customer details
   document.getElementById('orderForm').style.display = 'block';
   document.getElementById('orderSuccess').style.display = 'none';
 
-  document.getElementById('orderProductName').textContent = currentProduct.name;
-  document.getElementById('orderProductPrice').textContent = '₦' + currentProduct.price.toLocaleString();
+  // Update order modal title and total
+  document.querySelector('.order-eyebrow').textContent = 'Last Breed — Checkout';
+  document.querySelector('.order-title').textContent = 'Your Details';
+  document.querySelector('.order-total-amount').textContent = '₦' + subtotal.toLocaleString();
 
-  // Set thumb from product card
-  const cards = document.querySelectorAll('.product-card');
-  const idx = productKey === 'noface' ? 0 : 1;
-  const thumbSrc = cards[idx]?.querySelector('.product-img')?.src || '';
-  document.getElementById('orderThumb').src = thumbSrc;
-  document.getElementById('orderThumb').alt = currentProduct.name;
+  // Hide product bar, show cart summary instead
+  const bar = document.getElementById('orderProductBar');
+  bar.innerHTML = cart.map(i =>
+    `<div style="display:flex;justify-content:space-between;width:100%;font-family:'Courier Prime',monospace;font-size:0.7rem;padding:4px 0;border-bottom:1px solid #222;">
+      <span>${i.name} × ${i.qty} <span style="color:var(--khaki)">[${i.size}]</span></span>
+      <span>₦${(i.price * i.qty).toLocaleString()}</span>
+    </div>`
+  ).join('');
+  bar.style.flexDirection = 'column';
+  bar.style.gap = '0';
+
+  // Update pay button
+  document.getElementById('orderPayBtn').textContent = 'Pay Now — Card or Bank Transfer';
+
+  closeCart();
 
   document.getElementById('orderBackdrop').classList.add('open');
   const modal = document.getElementById('orderModal');
@@ -2266,26 +2598,17 @@ function closeOrder() {
 function selectOrderSize(el) {
   document.querySelectorAll('.order-size').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  currentSize = el.textContent;
 }
 
 function validateOrder() {
   let valid = true;
-  const fields = ['orderName','orderEmail','orderPhone','orderAddress'];
-  fields.forEach(id => {
+  ['orderName','orderEmail','orderPhone','orderAddress'].forEach(id => {
     const el = document.getElementById(id);
     if (!el.value.trim()) { el.classList.add('error'); valid = false; }
     else el.classList.remove('error');
   });
-  if (!currentSize) {
-    document.querySelectorAll('.order-size').forEach(b => b.style.borderColor = 'var(--red)');
-    setTimeout(() => document.querySelectorAll('.order-size').forEach(b => b.style.borderColor = ''), 1400);
-    valid = false;
-  }
   const emailEl = document.getElementById('orderEmail');
-  if (emailEl.value && !emailEl.value.includes('@')) {
-    emailEl.classList.add('error'); valid = false;
-  }
+  if (emailEl.value && !emailEl.value.includes('@')) { emailEl.classList.add('error'); valid = false; }
   return valid;
 }
 
@@ -2296,98 +2619,73 @@ function initiatePayment() {
   const email   = document.getElementById('orderEmail').value.trim();
   const phone   = document.getElementById('orderPhone').value.trim();
   const address = document.getElementById('orderAddress').value.trim();
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
   const btn = document.getElementById('orderPayBtn');
   btn.disabled = true;
   btn.textContent = 'Opening Paystack...';
 
+  const itemsSummary = cart.map(i => `${i.name} x${i.qty} [${i.size}]`).join(', ');
+
   const handler = PaystackPop.setup({
     key: PAYSTACK_PUBLIC_KEY,
     email: email,
-    amount: currentProduct.price * 100,
-    currency: currentProduct.currency,
+    amount: subtotal * 100,
+    currency: 'NGN',
     ref: 'LB-' + Date.now(),
     channels: ['card', 'bank', 'ussd', 'bank_transfer'],
     metadata: {
       custom_fields: [
-        { display_name: 'Product',  variable_name: 'product',  value: currentProduct.name },
-        { display_name: 'Size',     variable_name: 'size',     value: currentSize },
+        { display_name: 'Customer', variable_name: 'customer', value: name },
+        { display_name: 'Items',    variable_name: 'items',    value: itemsSummary },
         { display_name: 'Phone',    variable_name: 'phone',    value: phone },
-        { display_name: 'Address',  variable_name: 'address',  value: address },
-        { display_name: 'Customer', variable_name: 'customer', value: name }
+        { display_name: 'Address',  variable_name: 'address',  value: address }
       ]
     },
     onClose: function() {
       btn.disabled = false;
-      btn.textContent = 'Pay with Paystack';
+      btn.textContent = 'Pay Now — Card or Bank Transfer';
     },
     callback: function(response) {
-      onPaymentSuccess({ name, email, phone, address, ref: response.reference });
+      onPaymentSuccess({ name, email, phone, address, ref: response.reference, subtotal, itemsSummary });
     }
   });
   handler.openIframe();
 }
 
-function onPaymentSuccess({ name, email, phone, address, ref }) {
-  const order = {
-    id:      'LB' + String(Date.now()).slice(-6),
-    date:    new Date().toLocaleDateString('en-GB'),
-    time:    new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}),
-    name,
-    email,
-    phone,
-    product: currentProduct.name,
-    size:    currentSize,
-    address,
-    amount:  currentProduct.price,
-    currency: currentProduct.currency,
+function onPaymentSuccess({ name, email, phone, address, ref, subtotal, itemsSummary }) {
+  // Save order
+  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  orders.unshift({
+    id: 'LB' + String(Date.now()).slice(-6),
+    date: new Date().toLocaleDateString('en-GB'),
+    time: new Date().toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}),
+    name, email, phone, address,
+    product: itemsSummary,
+    size: cart.map(i => i.size).join(', '),
+    amount: subtotal,
+    currency: 'NGN',
     ref,
     status: 'paid'
-  };
-
-  // Save to localStorage
-  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
-  orders.unshift(order);
+  });
   localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
 
-  // Send emails via EmailJS
-  sendEmails(order);
+  // Clear cart
+  cart = [];
+  saveCart();
 
   // Show success
   document.getElementById('orderForm').style.display = 'none';
   document.getElementById('orderSuccessSub').innerHTML =
-    `Thanks <strong>${name}</strong>! Your order for <strong>${order.product}</strong> (Size ${order.size}) has been confirmed.<br>
-    A confirmation has been sent to <strong>${email}</strong>.<br><br>
+    `Thanks <strong>${name}</strong>! Your order has been confirmed.<br>
+    Check <strong>${email}</strong> for your receipt.<br><br>
     <span style="color:var(--khaki);font-size:0.65rem;">Ref: ${ref}</span>`;
   document.getElementById('orderSuccess').style.display = 'block';
-
   document.getElementById('orderPayBtn').disabled = false;
-  document.getElementById('orderPayBtn').textContent = 'Pay with Paystack';
+  document.getElementById('orderPayBtn').textContent = 'Pay Now — Card or Bank Transfer';
 }
 
-function sendEmails(order) {
-  if (!window.emailjs || EMAILJS_PUBLIC_KEY.startsWith('REPLACE')) return;
-
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
-  const params = {
-    to_email:      order.email,
-    to_name:       order.name,
-    product:       order.product,
-    size:          order.size,
-    amount:        '₦' + order.amount.toLocaleString(),
-    address:       order.address,
-    ref:           order.ref,
-    admin_email:   ADMIN_EMAIL,
-    order_id:      order.id,
-    date:          order.date + ' ' + order.time
-  };
-
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-    .catch(err => console.warn('EmailJS error:', err));
-}
-
-// ── ADMIN DASHBOARD ────────────────────────────────────────────
+// ── ADMIN DASHBOARD ───────────────────────────────────────────
 function openDash() {
   document.getElementById('dashBackdrop').classList.add('open');
   document.getElementById('dashPass').value = '';
@@ -2436,7 +2734,7 @@ function renderDash() {
     </div>
     <div class="dash-stat">
       <div class="dash-stat-label">Top Product</div>
-      <div class="dash-stat-value" style="font-size:1.4rem;">${topProduct}</div>
+      <div class="dash-stat-value" style="font-size:1.2rem;">${topProduct.split(' ')[0]}</div>
       <div class="dash-stat-sub">${products[topProduct] || 0} orders</div>
     </div>
     <div class="dash-stat">
@@ -2448,12 +2746,7 @@ function renderDash() {
 
   const tbody = document.getElementById('dashTableBody');
   const empty = document.getElementById('dashEmpty');
-
-  if (!orders.length) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (!orders.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   tbody.innerHTML = orders.map((o, i) => `
     <tr>
@@ -2463,7 +2756,7 @@ function renderDash() {
       <td>${o.email}</td>
       <td style="color:var(--white)">${o.product}</td>
       <td style="color:var(--khaki)">${o.size}</td>
-      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.address}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.address}</td>
       <td style="color:var(--white)">₦${o.amount.toLocaleString()}</td>
       <td><span class="dash-badge ${o.status}">${o.status}</span></td>
       <td style="color:var(--grey);font-size:0.6rem;">${o.ref}</td>
@@ -2474,12 +2767,12 @@ function renderDash() {
 function exportCSV() {
   const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
   if (!orders.length) return;
-  const headers = ['#','Date','Time','Name','Email','Phone','Product','Size','Address','Amount','Status','Ref'];
+  const headers = ['#','Date','Time','Name','Email','Phone','Items','Size','Address','Amount','Status','Ref'];
   const rows = orders.map((o,i) => [
     orders.length-i, o.date, o.time, o.name, o.email, o.phone,
-    o.product, o.size, '"'+o.address+'"', o.amount, o.status, o.ref
+    '"'+o.product+'"', o.size, '"'+o.address+'"', o.amount, o.status, o.ref
   ]);
-  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const csv = [headers, ...rows].map(r => r.join(',')).join(String.fromCharCode(10));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
   a.download = 'lastbreed-orders-' + new Date().toISOString().slice(0,10) + '.csv';
@@ -2492,6 +2785,28 @@ function clearOrders() {
     renderDash();
   }
 }
+
+// ── SCROLL REVEALS ────────────────────────────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+reveals.forEach(el => observer.observe(el));
+if (window.innerWidth <= 768) reveals.forEach(el => el.classList.add('visible'));
+
+// ── CUSTOM CURSOR ─────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .product-card, .drop-item').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+});
+
+// Init
+updateCartUI();
 </script>
 </body>
 </html>

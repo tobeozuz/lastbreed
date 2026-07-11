@@ -2296,24 +2296,80 @@
   window.addEventListener('resize', resize);
   drawNoise();
 })();
-
 </script>
 <script>
+  function openPopup() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("popup").style.display = "block";
+  }
+
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popup").style.display = "none";
+  }
+
   function setStore(store) {
     document.cookie = `store=${store}; path=/`;
-    location.reload();
+    location.reload(); // IMPORTANT
   }
+
+  async function loadPrice() {
+    const res = await fetch("/api/get-price");
+    const data = await res.json();
+    document.getElementById("price").innerText =
+      `${data.currency} ${data.price}`;
+  }
+
+  async function checkout() {
+    const res = await fetch("/api/checkout");
+    const data = await res.json();
+    window.location.href = data.checkoutUrl;
+  }
+
+  loadPrice();
 </script>
- 
+
 
 <div class="bg-grid"></div>
 <div class="bg-vignette"></div>
 
-<div id="store-switcher">
-  <button onclick="setStore('NGN')">🇳🇬 Nigerian Store</button>
-  <button onclick="setStore('USD')">🌍 International Store</button>
-  <button onclick="setStore('GBP')">🇬🇧 UK Store</button>
+<!-- Popup Overlay -->
+<div id="overlay" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  z-index:999;
+"></div>
+
+<!-- Popup Box -->
+<div id="popup" style="
+  display:none;
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  z-index:1000;
+  width:300px;
+  text-align:center;
+">
+  <h3>Select Store</h3>
+
+  <button onclick="setStore('NGN')" style="margin:10px;">🇳🇬 Nigerian Store</button>
+  <button onclick="setStore('USD')" style="margin:10px;">🌍 International Store</button>
+  <button onclick="setStore('GBP')" style="margin:10px;">🇬🇧 UK Store</button>
+
+  <br><br>
+  <button onclick="closePopup()">Close</button>
 </div>
+
+<!-- Trigger Button -->
+<button onclick="openPopup()" style="position:fixed; bottom:20px; right:20px;">
+  Change Store
+</button>
 
 
 

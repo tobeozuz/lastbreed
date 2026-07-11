@@ -8,6 +8,23 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-MKQHLK3R4N');
+  
+</script>
+<script> 
+  async function loadPrice() {
+    const res = await fetch("/api/get-price");
+    const data = await res.json();
+    document.getElementById("price").innerText =
+      `${data.currency} ${data.price}`;
+  }
+
+  async function checkout() {
+    const res = await fetch("/api/checkout");
+    const data = await res.json();
+    window.location.href = data.checkoutUrl;
+  }
+
+  loadPrice();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

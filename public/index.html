@@ -2296,12 +2296,26 @@
   window.addEventListener('resize', resize);
   drawNoise();
 })();
+
 </script>
+<script>
+  function setStore(store) {
+    document.cookie = `store=${store}; path=/`;
+    location.reload();
+  }
+</script>
+ 
 
 <div class="bg-grid"></div>
 <div class="bg-vignette"></div>
 
-<div class="cursor" id="cursor"></div>
+<div id="store-switcher">
+  <button onclick="setStore('NGN')">🇳🇬 Nigerian Store</button>
+  <button onclick="setStore('USD')">🌍 International Store</button>
+  <button onclick="setStore('GBP')">🇬🇧 UK Store</button>
+</div>
+
+
 
 <!-- NAV -->
 <nav>

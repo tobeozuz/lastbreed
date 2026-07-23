@@ -1,4 +1,4 @@
-import detectCountry from "../api/detect-country";
+import detectCountry from "./detect-country";
 import convertPrice from "../services/currency";
 
 const basePriceNGN = 25000; // example
@@ -6,12 +6,22 @@ const basePriceNGN = 25000; // example
 export default async (req, res) => {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
+  // 1. Check cookie first
+const store = req.cookies.store;
+
+let currency;
+
+if (store) {
+  currency = store; // NGN, USD, GBP
+} else {
+  // 2. Fallback to auto-detection
   const country = await detectCountry(ip);
 
-  let currency = "USD";
   if (country === "NG") currency = "NGN";
-  if (country === "GB") currency = "GBP";
-  if (["FR", "DE", "NL", "ES", "IT"].includes(country)) currency = "EUR";
+  else if (country === "GB") currency = "GBP";
+  else currency = "USD";
+}
+
 
   let price = basePriceNGN;
 

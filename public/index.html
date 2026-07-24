@@ -483,6 +483,25 @@
     display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px;
     padding-bottom:50px;
   }
+  .now-playing-pill{
+  position:fixed;
+  bottom:24px;
+  left:78px;
+  z-index:60;
+  display:none;
+  align-items:center;
+  padding:14px 20px;
+  background:#f4f3f0;
+  border-radius:999px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  font-family:'Inter',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:0.01em;
+  color:#1a1a1a;
+  white-space:nowrap;
+}
+.now-playing-pill.show{display:flex;}
   .foot-brand .wordmark{font-size:26px;}
   .foot-brand p{font-size:13px;color:var(--muted);margin-top:16px;max-width:260px;line-height:1.6;}
   .foot-col h4{font-size:11px;letter-spacing:0.16em;color:var(--muted);margin-bottom:16px;}
@@ -624,6 +643,7 @@
 <button class="music-btn floating-widget" id="musicBtn" aria-label="Play homepage song">
   <div class="bars"><i></i><i></i><i></i></div>
 </button>
+<div class="now-playing-pill" id="musicHint">NOW PLAYING! — <span id="nowPlayingTrack"></span></div>
 
 <div class="floating-widget currency-widget" id="currencyWidget">
   <button class="currency-toggle" id="currencyToggle">
@@ -658,10 +678,7 @@
 <div class="page" id="page-about">
   <section id="about">
     <div class="section-head">
-      <div>
-        
-        <h2 class="display">The Brand</h2>
-      </div>
+      
     </div>
     <div class="about-grid">
       <div class="about-statement">
@@ -709,7 +726,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 LAST BREED. ALL RIGHTS RESERVED.</span>
+      <span>©️ 2026 LAST BREED. ALL RIGHTS RESERVED.</span>
       <span>SITE BY LAST BREED — LAGOS</span>
     </div>
   </footer>
@@ -719,8 +736,10 @@
 <script>
   // ===================== CONFIG =====================
   // Drop your files anywhere accessible to this page and paste the paths/URLs below.
+  const SONG_TITLE = "Flashing Lights";
+const SONG_ARTIST = "Kanye West";
   const VIDEO_SRC = "media/hero.mp4";   // e.g. "media/hero.mp4" or a hosted URL
-  const SONG_SRC  = "";   // e.g. "media/theme-song.mp3" or a hosted URL
+  const SONG_SRC  = "media/theme-song.mp3";   // e.g. "media/theme-song.mp3" or a hosted URL
 
   // Your Paystack PUBLIC key (starts with pk_live_ or pk_test_). This is safe to put in
   // client-side code — it's the publishable key, not the secret key. Never put a secret
@@ -747,12 +766,34 @@
   }
 
   const musicBtn = document.getElementById('musicBtn');
+  const musicHint = document.getElementById('musicHint');
   let audio = null;
   let playing = false;
+
+  function onSongStarted() {
+    playing = true;
+    musicBtn.classList.add('playing');
+    document.getElementById('nowPlayingTrack').textContent = `${SONG_TITLE} - ${SONG_ARTIST}`;
+    musicHint.classList.add('show');
+    clearTimeout(musicHint._hideTimer);
+    musicHint._hideTimer = setTimeout(() => musicHint.classList.remove('show'), 10000);
+  }
 
   if (SONG_SRC) {
     audio = new Audio(SONG_SRC);
     audio.loop = true;
+
+    audio.play().then(onSongStarted).catch(() => {
+      const startOnFirstInteraction = () => {
+        audio.play().then(onSongStarted).catch(() => {});
+        document.removeEventListener('click', startOnFirstInteraction);
+        document.removeEventListener('touchstart', startOnFirstInteraction);
+        document.removeEventListener('keydown', startOnFirstInteraction);
+      };
+      document.addEventListener('click', startOnFirstInteraction);
+      document.addEventListener('touchstart', startOnFirstInteraction);
+      document.addEventListener('keydown', startOnFirstInteraction);
+    });
   } else {
     musicBtn.style.opacity = '0.35';
     musicBtn.setAttribute('aria-label', 'Add SONG_SRC in the code to enable music');
@@ -762,12 +803,13 @@
     if (!audio) return;
     if (playing) {
       audio.pause();
+      playing = false;
       musicBtn.classList.remove('playing');
+      musicHint.classList.remove('show');
+      clearTimeout(musicHint._hideTimer);
     } else {
-      audio.play().catch(() => {});
-      musicBtn.classList.add('playing');
+      audio.play().then(onSongStarted).catch(() => {});
     }
-    playing = !playing;
   });
 
   // ===================== Currency display =====================
@@ -830,15 +872,15 @@
 
   // ===================== Products =====================
   const PRODUCTS = [
-    { id: 'noface-tee',            name: 'NoFace Tee',              category: 'TOPS',      ngn: 28000, img: 'media/products/noface-tee.jpeg',            sizes: ['S','M','L','XL'] },
-    { id: 'one-of-one-tee',        name: 'One Of One Tee',          category: 'TOPS',      ngn: 28000, img: 'media/products/one-of-one-tee.jpeg',        sizes: ['S','M','L','XL'] },
-    { id: 'quarter-zip',           name: 'LB Quarter-Zip',          category: 'OUTERWEAR', ngn: 31000, img: 'media/products/quarter-zip.jpeg',           sizes: ['S','M','L','XL'] },
-    { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt',   category: 'OUTERWEAR', ngn: 31000, img: 'media/products/one-of-one-sweatshirt.jpeg', sizes: ['S','M','L','XL'] },
-    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',        category: 'SETS',      ngn: 41000, img: 'media/products/two-piece-grey.jpeg',        sizes: ['S','M','L','XL'] },
-    { id: 'two-piece-black',       name: 'Two-Piece (Black)',       category: 'SETS',      ngn: 41000, img: 'media/products/two-piece-black.jpeg',       sizes: ['S','M','L','XL'] },
-     { id: 'noface-tee-white',       name: 'Noface Tee (White)',       category: 'SETS',      ngn: 28000, img: 'media/products/noface-tee-white.jpeg',       sizes: ['S','M','L','XL'] },
-      { id: 'one-of-one-tee-black',       name: 'One of One Tee (Black)',       category: 'SETS',      ngn: 28000, img: 'media/products/one-of-one-tee-black.jpeg',       sizes: ['S','M','L','XL'] },
-       { id: 'one-of-one-tee-grey',       name: 'One of One Tee (Grey)',       category: 'SETS',      ngn: 41000, img: 'media/products/one-of-one-tee-grey.jpeg',       sizes: ['S','M','L','XL'] },
+    { id: 'noface-tee',            name: 'NoFace Tee',              category: '',      ngn: 28000, img: 'media/products/noface-tee.jpeg',            sizes: ['M','L','XL'] },
+    { id: 'one-of-one-tee',        name: 'One Of One Tee',          category: '',      ngn: 28000, img: 'media/products/one-of-one-tee.jpeg',        sizes: ['M','L','XL'] },
+    { id: 'quarter-zip',           name: 'LB Quarter-Zip',          category: '', ngn: 31000, img: 'media/products/quarter-zip.jpeg',           sizes: ['M','L','XL'] },
+    { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt',   category: '', ngn: 31000, img: 'media/products/one-of-one-sweatshirt.jpeg', sizes: ['M','L','XL'] },
+    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',        category: '',      ngn: 41000, img: 'media/products/two-piece-grey.jpeg',        sizes: ['M','L','XL'] },
+    { id: 'two-piece-black',       name: 'Two-Piece (Black)',       category: '',      ngn: 41000, img: 'media/products/two-piece-black.jpeg',       sizes: ['M','L','XL'] },
+     { id: 'noface-tee-white',       name: 'Noface Tee (White)',       category: '',      ngn: 28000, img: 'media/products/noface-tee-white.jpeg',       sizes: ['M','L','XL'] },
+      { id: 'one-of-one-tee-black',       name: 'One of One Tee (Black)',       category: '',      ngn: 28000, img: 'media/products/one-of-one-tee-black.jpeg',       sizes: ['M','L','XL'] },
+       { id: 'one-of-one-tee-grey',       name: 'One of One Tee (Grey)',       category: '',      ngn: 41000, img: 'media/products/one-of-one-tee-grey.jpeg',       sizes: ['M','L','XL'] },
   ];
 
   function productById(id) { return PRODUCTS.find(p => p.id === id); }

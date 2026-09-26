@@ -3,1160 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAST BREED — One Of One</title>
-<meta name="description" content="Last Breed. Didn't choose to be different. Stopped hiding it. SS/2026, Lagos.">
+<title>Sign Up</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0a0b;
-    --bg-alt:#141416;
-    --fg:#eeece6;
-    --muted:#8c8a86;
-    --accent:#c8391f;
-    --chrome-1:#e4e6e8;
-    --chrome-2:#8a8f94;
-    --chrome-3:#3d4144;
-    --line:rgba(238,236,230,0.14);
-    --maxw:1200px;
+    --bg:#0100f6; /* same royal blue sampled for the store */
+    --fg:#ffffff;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html,body{height:100%;}
   body{
     background:var(--bg);
     color:var(--fg);
     font-family:'Inter',sans-serif;
-    overflow-x:hidden;
-    -webkit-font-smoothing:antialiased;
-  }
-  ::selection{background:var(--accent);color:var(--fg);}
-
-  .mono{font-family:'Space Mono',monospace;}
-  .display{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0.01em;}
-
-  a{color:inherit;text-decoration:none;}
-  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
-
-  /* ===== Ticker ===== */
-  .ticker-wrap{
-    width:100%;
-    overflow:hidden;
-    background:var(--bg-alt);
-    border-bottom:1px solid var(--line);
-    white-space:nowrap;
-    padding:9px 0;
-  }
-  .ticker-wrap.bottom{border-bottom:none;border-top:1px solid var(--line);}
-  .ticker{
-    display:inline-block;
-    font-size:11px;
-    letter-spacing:0.14em;
-    color:var(--muted);
-    animation:scroll-left 26s linear infinite;
-  }
-  .ticker.reverse{animation:scroll-right 30s linear infinite;}
-  .ticker span{margin:0 18px;}
-  .ticker span.accent{color:var(--accent);}
-  @keyframes scroll-left{
-    0%{transform:translateX(0);}
-    100%{transform:translateX(-50%);}
-  }
-  @keyframes scroll-right{
-    0%{transform:translateX(-50%);}
-    100%{transform:translateX(0);}
-  }
-
-  /* ===== Nav ===== */
-  nav{
-    position:fixed;top:32px;left:0;right:0;
-    z-index:50;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 24px;
-    pointer-events:none;
-  }
-  nav *{pointer-events:auto;}
-  .nav-icon-btn{
-    width:42px;height:42px;
     display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--line);
-    border-radius:50%;
-    background:rgba(10,10,11,0.35);
-    backdrop-filter:blur(6px);
-    transition:border-color .2s ease, background .2s ease;
-  }
-  .nav-icon-btn:hover{border-color:var(--fg);background:rgba(10,10,11,0.6);}
-  .nav-icon-btn svg{width:16px;height:16px;stroke:var(--fg);}
-
-  .wordmark{
-    font-family:'Anton',sans-serif;
-    font-size:20px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    background:linear-gradient(180deg, var(--chrome-1) 0%, var(--chrome-2) 45%, var(--chrome-3) 55%, var(--chrome-2) 75%, var(--chrome-1) 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 1px 1px rgba(0,0,0,0.6));
-  }
-
-  /* ===== Slide menu ===== */
-  .menu-panel{
-    position:fixed;top:0;left:0;bottom:0;
-    width:min(320px, 82vw);
-    background:var(--bg-alt);
-    border-right:1px solid var(--line);
-    z-index:80;
-    transform:translateX(-105%);
-    transition:transform .45s cubic-bezier(.77,0,.18,1);
-    display:flex;flex-direction:column;
-    padding:100px 32px 40px;
-  }
-  .menu-panel.open{transform:translateX(0);}
-  .menu-panel a{
-    font-family:'Anton',sans-serif;
-    font-size:28px;
-    text-transform:uppercase;
-    padding:12px 0;
-    border-bottom:1px solid var(--line);
-    transition:color .2s ease, padding-left .2s ease;
-  }
-  .menu-panel a:hover{color:var(--accent);padding-left:8px;}
-  .menu-foot{margin-top:auto;font-size:11px;color:var(--muted);letter-spacing:0.1em;line-height:1.9;}
-  .scrim{
-    position:fixed;inset:0;background:rgba(0,0,0,0.55);
-    z-index:70;opacity:0;pointer-events:none;transition:opacity .35s ease;
-  }
-  .scrim.open{opacity:1;pointer-events:auto;}
-  .menu-close{position:absolute;top:32px;right:28px;font-size:13px;letter-spacing:0.14em;color:var(--muted);}
-
-  /* ===== Hero ===== */
-  .hero{
-    position:relative;
-    height:100svh;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    background:
-      radial-gradient(ellipse at 50% 30%, #1b1a1c 0%, #0a0a0b 70%);
-  }
-  .hero video{
-    position:absolute;inset:0;
-    width:100%;height:100%;
-    object-fit:cover;
-    opacity:0.55;
-  }
-  .hero-noise{
-    position:absolute;inset:0;
-    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px);
-    mix-blend-mode:overlay;
-    pointer-events:none;
-  }
-  .hero::after{
-    content:"";
-    position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(10,10,11,0.55) 0%, rgba(10,10,11,0.15) 32%, rgba(10,10,11,0.35) 65%, rgba(10,10,11,0.95) 100%);
-  }
-  .hero-content{
-    position:relative;z-index:2;
     text-align:center;
-    display:flex;flex-direction:column;align-items:center;
-    padding:0 20px;
+    padding:24px;
   }
-  .eyebrow{
-    font-size:12px;letter-spacing:0.32em;
-    color:var(--muted);
-    margin-bottom:18px;
-  }
-  .hero h1{
-    font-size:clamp(3.2rem, 13vw, 8rem);
-    line-height:0.9;
-    background:linear-gradient(180deg, var(--chrome-1) 0%, #fff 20%, var(--chrome-2) 48%, var(--chrome-3) 58%, var(--chrome-2) 78%, var(--chrome-1) 100%);
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 2px 12px rgba(0,0,0,0.5));
-  }
-  .hero-tagline{
-    margin-top:16px;
-    font-size:clamp(12px,2.4vw,15px);
-    letter-spacing:0.08em;
-    color:var(--fg);
-    max-width:520px;
-  }
-  .hero-tagline .accent{color:var(--accent);}
-
-  .cta-btn{
-    margin-top:44px;
-    display:inline-flex;align-items:center;gap:10px;
-    padding:18px 40px;
-    border:1px solid var(--fg);
-    border-radius:999px;
-    font-size:13px;
-    letter-spacing:0.22em;
-    text-transform:uppercase;
-    position:relative;
-    overflow:hidden;
-    transition:color .35s ease;
-  }
-  .cta-btn::before{
-    content:"";
-    position:absolute;inset:0;
-    background:var(--accent);
-    transform:translateX(-101%);
-    transition:transform .4s cubic-bezier(.77,0,.18,1);
-    z-index:-1;
-  }
-  .cta-btn:hover{color:#0a0a0b;border-color:var(--accent);}
-  .cta-btn:hover::before{transform:translateX(0);}
-  .cta-btn svg{width:14px;height:14px;stroke:currentColor;transition:transform .3s ease;}
-  .cta-btn:hover svg{transform:translateX(3px);}
-
-  .hero-foot{
-    position:absolute;bottom:26px;left:0;right:0;
-    z-index:3;
-    display:flex;align-items:center;justify-content:flex-end;
-    padding:0 26px;
-    font-size:11px;letter-spacing:0.1em;color:var(--muted);
-  }
-  .coords{text-align:right;line-height:1.6;}
-
-  /* ===== Floating widgets (persist across the whole page) ===== */
-  .floating-widget{
-    position:fixed;
-    bottom:24px;
-    z-index:60;
-  }
-  #musicBtn.floating-widget{left:24px;}
-
-  .music-btn{
-    width:46px;height:46px;border-radius:50%;
-    border:1px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(20,20,22,0.75);backdrop-filter:blur(6px);
-    transition:border-color .2s ease;
-  }
-  .music-btn:hover{border-color:var(--fg);}
-  .music-btn svg{width:17px;height:17px;stroke:var(--fg);fill:none;}
-  .music-btn.playing svg .wave{animation:pulse 1s ease-in-out infinite;}
-  .music-btn .bars{display:flex;align-items:flex-end;gap:2px;height:14px;}
-  .music-btn .bars i{width:2px;background:var(--fg);display:block;border-radius:1px;}
-  .music-btn.playing .bars i{animation:bar 0.9s ease-in-out infinite;}
-  .music-btn .bars i:nth-child(1){height:5px;animation-delay:0s;}
-  .music-btn .bars i:nth-child(2){height:11px;animation-delay:.15s;}
-  .music-btn .bars i:nth-child(3){height:7px;animation-delay:.3s;}
-  @keyframes bar{
-    0%,100%{transform:scaleY(0.4);}
-    50%{transform:scaleY(1);}
-  }
-  .currency-widget{
-    right:24px;
-    font-family:'Space Mono',monospace;
-  }
-  .currency-toggle{
-    display:flex;align-items:center;gap:10px;
-    padding:13px 18px;
-    background:rgba(20,20,22,0.75);
-    backdrop-filter:blur(6px);
-    border:1px solid var(--line);
-    border-radius:999px;
-    font-size:12px;letter-spacing:0.1em;color:var(--fg);
-    transition:border-color .2s ease;
-  }
-  .currency-toggle:hover{border-color:var(--fg);}
-  .currency-toggle svg{width:10px;height:10px;stroke:var(--fg);transition:transform .25s ease;}
-  .currency-widget.open .currency-toggle svg{transform:rotate(180deg);}
-  .currency-list{
-    position:absolute;bottom:calc(100% + 10px);right:0;
-    min-width:230px;
-    background:#1c1c1e;
-    border:1px solid var(--line);
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 12px 40px rgba(0,0,0,0.45);
-    opacity:0;transform:translateY(8px);
-    pointer-events:none;
-    transition:opacity .25s ease, transform .25s ease;
-  }
-  .currency-widget.open .currency-list{opacity:1;transform:translateY(0);pointer-events:auto;}
-  .currency-list button{
-    display:block;width:100%;text-align:left;
-    padding:14px 18px;
-    font-size:13px;letter-spacing:0.03em;
-    color:var(--fg);
-    border-bottom:1px solid var(--line);
-    transition:background .15s ease, color .15s ease;
-  }
-  .currency-list button:last-child{border-bottom:none;}
-  .currency-list button:hover{background:rgba(255,255,255,0.06);color:var(--accent);}
-  .currency-list button.active{color:var(--accent);}
-
-  .scroll-cue{display:none;}
-
-  /* ===== Standalone pages: only one visible at a time, switched by nav/menu/CTA, not scroll ===== */
-  .page{display:none;}
-  .page.active{display:block;}
-
-  /* ===== Sections ===== */
-  section{position:relative;padding:120px 24px;max-width:var(--maxw);margin:0 auto;}
-  .section-head{
-    display:flex;align-items:baseline;justify-content:space-between;
-    border-bottom:1px solid var(--line);
-    padding-bottom:22px;margin-bottom:56px;
-    flex-wrap:wrap;gap:12px;
-  }
-  .section-head .idx{font-size:13px;color:var(--muted);letter-spacing:0.14em;}
-  .section-head h2{font-size:clamp(2rem,5vw,3.2rem);}
-  .section-head .note{font-size:12px;color:var(--muted);letter-spacing:0.08em;max-width:260px;text-align:right;}
-
-  /* Merch grid */
-  .merch-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-  }
-  .tile{
-    background:var(--bg);
-    padding:36px 28px 30px;
-    display:flex;flex-direction:column;
-    min-height:340px;
-    position:relative;
-    transition:background .3s ease;
-  }
-  .tile:hover{background:var(--bg-alt);}
-  .cart-count{
-    position:absolute;top:-4px;right:-4px;
-    min-width:17px;height:17px;padding:0 3px;
-    border-radius:999px;
-    background:var(--accent);
-    color:#fff;
-    font-family:'Space Mono',monospace;
-    font-size:10px;line-height:17px;text-align:center;
-  }
-  .cart-count.zero{display:none;}
-
-  .tile-cart-row{
-    display:flex;gap:8px;margin-top:12px;
-  }
-  .size-select{
-    flex:0 0 72px;
-    background:var(--bg);
-    border:1px solid var(--line);
-    color:var(--fg);
-    font-family:'Space Mono',monospace;
-    font-size:12px;
-    padding:10px 6px;
-    border-radius:6px;
-  }
-  .add-cart-btn{
-    flex:1;
-    background:var(--fg);
-    color:#0a0a0b;
-    font-size:11px;letter-spacing:0.12em;
-    border-radius:6px;
-    text-transform:uppercase;
-    transition:background .2s ease;
-  }
-  .add-cart-btn:hover{background:var(--accent);color:#fff;}
-  .add-cart-btn:disabled{background:var(--bg-alt);color:var(--muted);cursor:not-allowed;}
-  .add-cart-btn.added{background:var(--accent);color:#fff;}
-
-  /* ===== Cart / checkout drawer ===== */
-  .cart-panel{
-    position:fixed;top:0;right:0;bottom:0;
-    width:min(400px, 92vw);
-    background:var(--bg-alt);
-    border-left:1px solid var(--line);
-    z-index:90;
-    transform:translateX(105%);
-    transition:transform .45s cubic-bezier(.77,0,.18,1);
-    display:flex;flex-direction:column;
-    padding:32px 26px 26px;
-    overflow-y:auto;
-  }
-  .cart-panel.open{transform:translateX(0);}
-  .cart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;}
-  .cart-head h3{font-family:'Anton',sans-serif;font-size:1.3rem;text-transform:uppercase;}
-  .cart-close{font-size:12px;letter-spacing:0.12em;color:var(--muted);}
-  .cart-empty{color:var(--muted);font-size:13px;margin-top:40px;text-align:center;}
-
-  .cart-item{
-    display:flex;gap:12px;
-    padding:14px 0;border-bottom:1px solid var(--line);
-  }
-  .cart-item img{width:58px;height:70px;object-fit:cover;border-radius:6px;background:#fff;}
-  .cart-item-info{flex:1;display:flex;flex-direction:column;gap:4px;}
-  .cart-item-name{font-size:13px;}
-  .cart-item-meta{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
-  .cart-item-row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;}
-  .qty-controls{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;}
-  .qty-controls button{width:20px;height:20px;border:1px solid var(--line);border-radius:4px;}
-  .cart-item-remove{font-size:11px;color:var(--muted);text-decoration:underline;}
-  .cart-item-remove:hover{color:var(--accent);}
-
-  .cart-summary{margin-top:auto;padding-top:20px;border-top:1px solid var(--line);}
-  .cart-subtotal{display:flex;justify-content:space-between;font-size:14px;margin-bottom:16px;}
-  .cart-subtotal .amount{font-family:'Space Mono',monospace;}
-
-  .checkout-form{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
-  .checkout-form label{font-size:11px;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;display:block;}
-  .checkout-form input, .checkout-form textarea{
-    width:100%;background:var(--bg);border:1px solid var(--line);color:var(--fg);
-    padding:11px 12px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;
-  }
-  .checkout-form textarea{resize:vertical;min-height:64px;}
-  .checkout-back{font-size:11px;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px;display:inline-block;}
-  .checkout-back:hover{color:var(--fg);}
-  .pay-btn{
-    margin-top:6px;width:100%;text-align:center;justify-content:center;
-  }
-  .pay-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;}
-  .confirm-panel{margin-top:60px;text-align:center;}
-  .confirm-panel .check{font-size:40px;color:var(--accent);margin-bottom:16px;}
-  .confirm-panel h4{font-family:'Anton',sans-serif;font-size:1.4rem;text-transform:uppercase;margin-bottom:10px;}
-  .confirm-panel p{font-size:13px;color:var(--muted);line-height:1.6;}
-  .confirm-ref{font-family:'Space Mono',monospace;font-size:12px;margin-top:14px;color:var(--fg);}
-
-  .cart-scrim{
-    position:fixed;inset:0;background:rgba(0,0,0,0.55);
-    z-index:85;opacity:0;pointer-events:none;transition:opacity .35s ease;
-  }
-  .cart-scrim.open{opacity:1;pointer-events:auto;}
-
-  .tile-top{display:flex;justify-content:space-between;align-items:flex-start;font-size:11px;letter-spacing:0.12em;color:var(--muted);}
-  .tile-icon{
-    background:#fff;
-    border-radius:14px;
-    overflow:hidden;
-    aspect-ratio:4/5;
-    margin:2px 0 16px;
-    position:relative;
-  }
-  .tile-icon img{
+  .wrap{max-width:380px;width:100%;}
+  .brand-logo{
+    width:130px;
+    height:auto;
+    margin:0 auto 22px;
     display:block;
-    width:100%;height:100%;
-    object-fit:cover;
-    transition:transform .5s cubic-bezier(.2,.7,.2,1);
   }
-  .tile:hover .tile-icon img{transform:scale(1.035);}
-  .tile-icon-fallback{
-    display:none;
-    position:absolute;inset:0;
-    flex-direction:column;align-items:center;justify-content:center;gap:10px;
-    border:1.5px dashed #cfcfcf;
-    border-radius:14px;
-    margin:6px;
-    color:#a8a8a8;
+  h1{font-size:28px;font-weight:700;letter-spacing:-0.01em;margin-bottom:10px;}
+  p.sub{font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:32px;line-height:1.5;}
+  form{display:flex;flex-direction:column;gap:14px;}
+  input[type="email"]{
+    width:100%;padding:14px 16px;
+    border:none;
+    font-family:'Inter',sans-serif;font-size:14px;
+    background:#fff;color:#0a0a0a;
   }
-  .tile-icon-fallback svg{width:40px;height:40px;stroke:#b7b7b7;fill:none;stroke-width:1.3;}
-  .tile-icon-fallback span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.14em;}
-  .tile-name{font-family:'Anton',sans-serif;font-size:1.35rem;text-transform:uppercase;line-height:1.05;}
-  .tile-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
-  .tile-price{font-family:'Space Mono',monospace;font-size:14px;}
-  .tile-link{
-    font-size:11px;letter-spacing:0.1em;color:var(--muted);
-    display:flex;align-items:center;gap:6px;
-    opacity:0;transform:translateY(4px);
-    transition:opacity .3s ease, transform .3s ease, color .2s ease;
+  input[type="email"]::placeholder{color:#999;}
+  button{
+    font-family:inherit;cursor:pointer;border:none;
   }
-  .tile:hover .tile-link{opacity:1;transform:translateY(0);}
-  .tile-link:hover{color:var(--fg);}
-  .tile-link svg{width:11px;height:11px;stroke:currentColor;}
-
-  /* About */
-  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;}
-  .about-statement{font-family:'Anton',sans-serif;font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.12;text-transform:uppercase;}
-  .about-statement .accent{color:var(--accent);}
-  .about-side p{font-size:14px;line-height:1.8;color:var(--muted);margin-bottom:22px;}
-  .stamp{
-    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:0.08em;
-    border-top:1px solid var(--line);padding-top:18px;color:var(--fg);
+  .get-in-btn{
+    background:#fff;color:var(--bg);
+    padding:14px;font-size:14px;font-weight:700;
+    letter-spacing:0.03em;text-transform:uppercase;
+    transition:opacity .2s ease;
   }
-  @media (max-width:800px){.about-grid{grid-template-columns:1fr;}}
-
-  /* Footer */
-  footer{border-top:1px solid var(--line);padding:70px 24px 30px;}
-  .foot-grid{
-    max-width:var(--maxw);margin:0 auto;
-    display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px;
-    padding-bottom:50px;
+  .get-in-btn:hover{opacity:0.88;}
+  .get-in-btn:disabled{opacity:0.6;cursor:not-allowed;}
+  .skip-btn{
+    background:none;color:rgba(255,255,255,0.7);
+    font-size:12px;letter-spacing:0.04em;
+    padding:10px;margin-top:6px;
+    text-decoration:underline;
   }
-  .now-playing-pill{
-  position:fixed;
-  bottom:24px;
-  left:78px;
-  z-index:60;
-  display:none;
-  align-items:center;
-  padding:14px 20px;
-  background:#f4f3f0;
-  border-radius:999px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.25);
-  font-family:'Inter',sans-serif;
-  font-weight:700;
-  font-size:13px;
-  letter-spacing:0.01em;
-  color:#1a1a1a;
-  white-space:nowrap;
-}
-.now-playing-pill.show{display:flex;}
-  .foot-brand .wordmark{font-size:26px;}
-  .foot-brand p{font-size:13px;color:var(--muted);margin-top:16px;max-width:260px;line-height:1.6;}
-  .foot-col h4{font-size:11px;letter-spacing:0.16em;color:var(--muted);margin-bottom:16px;}
-  .foot-col a{display:block;font-size:14px;padding:6px 0;color:var(--fg);opacity:.85;transition:opacity .2s ease, color .2s ease;}
-  .foot-col a:hover{opacity:1;color:var(--accent);}
-  .foot-bottom{
-    max-width:var(--maxw);margin:0 auto;
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
-    font-size:11px;letter-spacing:0.08em;color:var(--muted);
-    border-top:1px solid var(--line);padding-top:24px;
+  .skip-btn:hover{color:#fff;}
+  .status-line{
+    font-size:13px;color:rgba(255,255,255,0.85);
+    margin-top:18px;min-height:18px;
   }
-  @media (max-width:700px){
-    .foot-grid{grid-template-columns:1fr 1fr;}
-    .about-grid{gap:36px;}
-    section{padding:80px 20px;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .ticker, .ticker.reverse, .music-btn.playing .bars i{animation:none !important;}
-  }
+  .error{color:#ffd2d2;}
 </style>
 </head>
 <body>
 
-<!-- ============ CONFIG NOTE ============
-  To finish setup, open the script at the bottom of this file and set:
-    VIDEO_SRC  -> path or URL to your hero video (mp4, ideally muted-friendly, vertical or wide both work)
-    SONG_SRC   -> path or URL to the homepage song (mp3)
-  Until those are set, the hero shows a dark gradient in place of video,
-  and the music button stays disabled.
-======================================= -->
+<!-- ==========================================================================
+  This page immediately redirects returning visitors straight to store.html —
+  see the small script right below <body>. Nothing renders for them; the flash
+  of unstyled content is avoided by keeping that check at the very top.
+=========================================================================== -->
+<script>
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+  const alreadyDecided = getCookie('lb_mailing_status') || localStorage.getItem('lb_mailing_status');
+  if (alreadyDecided) {
+    window.location.replace('store.html');
+  }
+</script>
 
-<div class="scrim" id="scrim"></div>
-<div class="menu-panel" id="menuPanel">
-  <span class="menu-close" id="menuClose">CLOSE ✕</span>
-  <a href="#top" data-page="home">Home</a>
-  <a href="#merch" data-page="merch">Merch</a>
-  <a href="#about" data-page="about">About</a>
-  <a href="#contact" data-page="contact">Contact</a>
-  <div class="menu-foot">
-    LAST BREED<br>
-    LAGOS · 6.5244°N 3.3792°E<br>
-    SS / 2026
-  </div>
+<div class="wrap">
+  <img src="media/lastbreed-logo.png.jpeg" alt="Last Breed" class="brand-logo">
+  <h1>Mailing List</h1>
+
+
+  <form id="signupForm">
+    <input type="email" id="emailInput" placeholder="you@email.com" required>
+    <button type="submit" class="get-in-btn" id="getInBtn">Get In</button>
+  </form>
+
+  <div class="status-line" id="statusLine"></div>
+
+  <button class="skip-btn" id="skipBtn">I'm not interested</button>
 </div>
 
-<nav>
-  <button class="nav-icon-btn" id="menuBtn" aria-label="Open menu">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-  </button>
-  <a href="#top" class="wordmark" data-page="home">Last&nbsp;Breed</a>
-  <button class="nav-icon-btn" id="cartBtn" aria-label="Open cart" style="position:relative;">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
-    <span id="cartCount" class="cart-count zero">0</span>
-  </button>
-</nav>
-
-<div class="cart-scrim" id="cartScrim"></div>
-<div class="cart-panel" id="cartPanel">
-
-  <div id="cartListView">
-    <div class="cart-head">
-      <h3>Your Cart</h3>
-      <span class="cart-close" id="cartClose">CLOSE ✕</span>
-    </div>
-    <div id="cartItems"></div>
-    <div class="cart-summary" id="cartSummary" style="display:none;">
-      <div class="cart-subtotal"><span>Subtotal</span><span class="amount" id="cartSubtotalAmt">₦0</span></div>
-      <a href="#" class="cta-btn pay-btn" id="goToCheckout">Proceed to Checkout</a>
-    </div>
-  </div>
-
-  <div id="checkoutFormView" style="display:none;">
-    <span class="checkout-back" id="backToCart">← BACK TO CART</span>
-    <div class="cart-head"><h3>Checkout</h3><span class="cart-close" id="cartClose2">CLOSE ✕</span></div>
-
-    <form class="checkout-form" id="checkoutForm">
-      <div>
-        <label>Full Name</label>
-        <input type="text" id="custName" required>
-      </div>
-      <div>
-        <label>Email Address</label>
-        <input type="email" id="custEmail" required>
-      </div>
-      <div>
-        <label>Phone Number</label>
-        <input type="tel" id="custPhone" required>
-      </div>
-      <div>
-        <label>Delivery Address</label>
-        <textarea id="custAddress" required></textarea>
-      </div>
-      <div>
-        <label>Shipping</label>
-        <select id="shippingSelect" class="size-select" style="width:100%;flex:none;">
-          <option value="domestic">Nigeria — Free shipping </option>
-          <option value="international">Outside Nigeria — flat international rate</option>
-        </select>
-      </div>
-
-      <div class="cart-summary" style="border-top:1px solid var(--line);">
-        <div class="cart-subtotal"><span>Subtotal</span><span class="amount" id="checkoutSubtotal">₦0</span></div>
-        <div class="cart-subtotal"><span>Shipping</span><span class="amount" id="checkoutShipping">₦0</span></div>
-        <div class="cart-subtotal" style="font-size:16px;"><span>Total</span><span class="amount" id="checkoutTotal">₦0</span></div>
-        <button type="submit" class="cta-btn pay-btn" id="payBtn">Pay Now — Card or Bank Transfer</button>
-        <p class="pay-note">Charged in NGN via Paystack · SSL encrypted · card and bank transfer both accepted, including international Visa/Mastercard.</p>
-      </div>
-    </form>
-  </div>
-
-  <div id="cartConfirmView" style="display:none;">
-    <div class="cart-head"><h3>Last Breed</h3><span class="cart-close" id="cartClose3">CLOSE ✕</span></div>
-    <div class="confirm-panel">
-      <div class="check">✓</div>
-      <h4>Order Confirmed</h4>
-      <p>Thanks — your order has been received.<br>A confirmation has been sent to your email.</p>
-      <div class="confirm-ref" id="confirmRef"></div>
-    </div>
-  </div>
-
-</div>
-
-<div class="page active" id="page-home">
-<header class="hero" id="top">
-  <video id="heroVideo" autoplay muted loop playsinline></video>
-  <div class="hero-noise"></div>
-  <div class="hero-content">
-    <p class="hero-tagline mono">DIDN'T CHOOSE TO BE <span class="accent">DIFFERENT</span>.<br>STOPPED HIDING IT.</p>
-    <a href="#merch" class="cta-btn" data-page="merch">
-      Shop Merch
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </a>
-  </div>
-</header>
-</div>
-
-<!-- Persistent floating controls: visible on every page -->
-<button class="music-btn floating-widget" id="musicBtn" aria-label="Play homepage song">
-  <div class="bars"><i></i><i></i><i></i></div>
-</button>
-<div class="now-playing-pill" id="musicHint">NOW PLAYING! — <span id="nowPlayingTrack"></span></div>
-
-<div class="floating-widget currency-widget" id="currencyWidget">
-  <button class="currency-toggle" id="currencyToggle">
-    <span id="currencyLabel">NGN</span>
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-  </button>
-  <div class="currency-list" id="currencyList">
-    <button data-code="NGN" class="active">Nigerian Naira (NGN)</button>
-    <button data-code="USD">US Dollar (USD)</button>
-    <button data-code="EUR">Euro (EUR)</button>
-    <button data-code="GBP">British Pound (GBP)</button>
-    <button data-code="CAD">Canadian Dollar (CAD)</button>
-    <button data-code="GHS">Ghanaian Cedi (GHS)</button>
-  </div>
-</div>
-
-<div class="page" id="page-merch">
-  <div class="ticker-wrap">
-    <div class="ticker mono">
-      <span>ONE OF ONE</span><span class="accent">·</span><span>STOPPED HIDING IT</span><span class="accent">·</span><span>1OF1</span><span class="accent">·</span><span>DIDN'T CHOOSE TO BE DIFFERENT</span><span class="accent">·</span><span>SS / 2026</span><span class="accent">·</span>
-      <span>ONE OF ONE</span><span class="accent">·</span><span>STOPPED HIDING IT</span><span class="accent">·</span><span>1OF1</span><span class="accent">·</span><span>DIDN'T CHOOSE TO BE DIFFERENT</span><span class="accent">·</span><span>SS / 2026</span><span class="accent">·</span>
-    </div>
-  </div>
-
-  <section id="merch">
-    
-
-    <div class="merch-grid" id="merchGrid"></div>
-  </section>
-</div>
-
-<div class="page" id="page-about">
-  <section id="about">
-    <div class="section-head">
-      
-    </div>
-    <div class="about-grid">
-      <div class="about-statement">
-        Last Breed is for people who <span class="accent">didn't choose</span> to be different — and stopped trying to hide it.
-      </div>
-      <div class="about-side">
-        <p>Built out of Lagos, worn everywhere. .</p>
-        <p>TELL YOUR STORY.</p>
-        <div class="stamp">LAGOS, NIGERIA<br>6.5244° N · 3.3792° E<br>SS / 2026</div>
-      </div>
-    </div>
-  </section>
-
-  <div class="ticker-wrap bottom">
-    <div class="ticker reverse mono">
-      <span>TELL YOUR STORY</span><span class="accent">·</span><span>LAST BREED</span><span class="accent">·</span><span>ONE OF ONE</span><span class="accent">·</span><span>LAGOS</span><span class="accent">·</span>
-      <span>TELL YOUR STORY</span><span class="accent">·</span><span>LAST BREED</span><span class="accent">·</span><span>ONE OF ONE</span><span class="accent">·</span><span>LAGOS</span><span class="accent">·</span>
-    </div>
-  </div>
-</div>
-
-<div class="page" id="page-contact">
-  <footer id="contact">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <span class="wordmark">Last Breed</span>
-        <p>Tell your story. Limited drops out of Lagos — one of one, every time.</p>
-      </div>
-      <div class="foot-col">
-        <h4>SHOP</h4>
-        <a href="#merch" data-page="merch">Tops</a>
-        <a href="#merch" data-page="merch">Outerwear</a>
-        <a href="#merch" data-page="merch">Sets</a>
-      </div>
-      <div class="foot-col">
-        <h4>BRAND</h4>
-        <a href="#about" data-page="about">About</a>
-        <a href="#contact" data-page="contact">Contact</a>
-      </div>
-      <div class="foot-col">
-        <h4>FOLLOW</h4>
-        <a href="https://www.instagram.com/thelastbreed_/">Instagram</a>
-        <a href="https://www.tiktok.com/@tobs.oz">TikTok</a>
-        <a href="https://x.com/lastbreed_01">X</a>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>©️ 2026 LAST BREED. ALL RIGHTS RESERVED.</span>
-      <span>SITE BY LAST BREED — LAGOS</span>
-    </div>
-  </footer>
-</div>
-
-<script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   // ===================== CONFIG =====================
-  // Drop your files anywhere accessible to this page and paste the paths/URLs below.
-  const SONG_TITLE = "Flashing Lights";
-const SONG_ARTIST = "Kanye West";
-  const VIDEO_SRC = "media/hero.mp4";   // e.g. "media/hero.mp4" or a hosted URL
-  const SONG_SRC  = "media/theme-song.mp3";   // e.g. "media/theme-song.mp3" or a hosted URL
-
-  // Your Paystack PUBLIC key (starts with pk_live_ or pk_test_). This is safe to put in
-  // client-side code — it's the publishable key, not the secret key. Never put a secret
-  // key (sk_...) in this file.
-  const PAYSTACK_PUBLIC_KEY = "pk_live_c88909148ec15f2069b637b23c5e85adb01db726";
-
-  // Flat shipping fees in NGN.
-  // Domestic is 0 because you've already built delivery-within-Nigeria into your product prices.
-  // International is a placeholder — replace with a real quote from your courier (DHL/UPS/etc.)
-  // for your actual destination zones once you have one; ₦25,000 is just a starting number.
-  const SHIPPING = {
-    domestic: 0,
-    international: 25000
-  };
+  // Point this at the ACTION URL of a real double-opt-in mailing list —
+  // e.g. Mailchimp, Brevo (Sendinblue), or ConvertKit's own embeddable-form
+  // action URL (found in their "Embed a form" / "Signup form" settings).
+  // That URL is safe to put in client-side code — it's a public form
+  // endpoint, NOT a secret API key. Leaving this blank means the button
+  // still works and lets people through, but no real confirmation email
+  // will be sent until you add a real endpoint here.
+  const MAILING_LIST_ACTION_URL = ""; // e.g. "https://xxxx.list-manage.com/subscribe/post?u=XXXX&id=XXXX"
+  const EMAIL_FIELD_NAME = "EMAIL"; // most providers expect this field name — check your form's real "name" attribute if unsure
   // ====================================================
 
-  const heroVideo = document.getElementById('heroVideo');
-  if (VIDEO_SRC) {
-    heroVideo.src = VIDEO_SRC;
-    heroVideo.load();               // reload the element now that a src exists
-    heroVideo.play().catch(() => {}); // some browsers need an explicit play() call here
-  } else {
-    heroVideo.style.display = 'none'; // falls back to the gradient background
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
   }
 
-  const musicBtn = document.getElementById('musicBtn');
-  const musicHint = document.getElementById('musicHint');
-  let audio = null;
-  let playing = false;
-
-  function onSongStarted() {
-    playing = true;
-    musicBtn.classList.add('playing');
-    document.getElementById('nowPlayingTrack').textContent = `${SONG_TITLE} - ${SONG_ARTIST}`;
-    musicHint.classList.add('show');
-    clearTimeout(musicHint._hideTimer);
-    musicHint._hideTimer = setTimeout(() => musicHint.classList.remove('show'), 10000);
+  function goToStore() {
+    window.location.href = 'store.html';
   }
 
-  if (SONG_SRC) {
-    audio = new Audio(SONG_SRC);
-    audio.loop = true;
-
-    audio.play().then(onSongStarted).catch(() => {
-      const startOnFirstInteraction = () => {
-        audio.play().then(onSongStarted).catch(() => {});
-        document.removeEventListener('click', startOnFirstInteraction);
-        document.removeEventListener('touchstart', startOnFirstInteraction);
-        document.removeEventListener('keydown', startOnFirstInteraction);
-      };
-      document.addEventListener('click', startOnFirstInteraction);
-      document.addEventListener('touchstart', startOnFirstInteraction);
-      document.addEventListener('keydown', startOnFirstInteraction);
-    });
-  } else {
-    musicBtn.style.opacity = '0.35';
-    musicBtn.setAttribute('aria-label', 'Add SONG_SRC in the code to enable music');
+  function rememberChoice(status) {
+    setCookie('lb_mailing_status', status, 365);
+    try { localStorage.setItem('lb_mailing_status', status); } catch (e) {}
   }
 
-  musicBtn.addEventListener('click', () => {
-    if (!audio) return;
-    if (playing) {
-      audio.pause();
-      playing = false;
-      musicBtn.classList.remove('playing');
-      musicHint.classList.remove('show');
-      clearTimeout(musicHint._hideTimer);
+  document.getElementById('signupForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value.trim();
+    if (!email) return;
+
+    const btn = document.getElementById('getInBtn');
+    const statusLine = document.getElementById('statusLine');
+    btn.disabled = true;
+
+    rememberChoice('subscribed');
+
+    if (MAILING_LIST_ACTION_URL) {
+      // Fire-and-forget: we submit to the list provider but don't wait on or
+      // read the response (their double opt-in email is triggered on their
+      // end), so a slow or blocked request never holds up entry to the store.
+      const body = new URLSearchParams();
+      body.append(EMAIL_FIELD_NAME, email);
+      fetch(MAILING_LIST_ACTION_URL, { method: 'POST', mode: 'no-cors', body })
+        .catch(() => {});
+
+      statusLine.textContent = "You're in — check your email to confirm your subscription.";
+      setTimeout(goToStore, 1600);
     } else {
-      audio.play().then(onSongStarted).catch(() => {});
+      // No real mailing list connected yet — don't claim an email was sent.
+      console.warn('MAILING_LIST_ACTION_URL is empty: no confirmation email was actually sent. Add a real double opt-in form action URL to enable this.');
+      statusLine.textContent = "Welcome in.";
+      setTimeout(goToStore, 700);
     }
   });
 
-  // ===================== Currency display =====================
-  // Prices are stored and charged in NGN (data-ngn). Other currencies here are DISPLAY
-  // ONLY, using approximate reference rates — not live rates, and not what gets charged.
-  // Paystack settles this store in NGN regardless of which currency is shown here;
-  // international cards still work fine, the customer's bank converts at their end.
-  const CURRENCIES = {
-    NGN: { symbol: '₦',   rate: 1,        decimals: 0 },
-    USD: { symbol: '$',   rate: 1/1600,   decimals: 2 },
-    EUR: { symbol: '€',   rate: 1/1750,   decimals: 2 },
-    GBP: { symbol: '£',   rate: 1/2000,   decimals: 2 },
-    CAD: { symbol: 'CA$', rate: 1/1150,   decimals: 2 },
-    GHS: { symbol: 'GH₵', rate: 1/105,    decimals: 2 },
-  };
-  let activeCurrency = 'NGN';
-
-  function formatPrice(ngnAmount, code) {
-    const c = CURRENCIES[code];
-    const value = ngnAmount * c.rate;
-    const formatted = value.toLocaleString(undefined, {
-      minimumFractionDigits: c.decimals,
-      maximumFractionDigits: c.decimals
-    });
-    return c.symbol + formatted;
-  }
-
-  function applyCurrency(code) {
-    activeCurrency = code;
-    document.querySelectorAll('.tile-price[data-ngn]').forEach(el => {
-      const ngn = Number(el.dataset.ngn);
-      if (ngn > 0) el.textContent = formatPrice(ngn, code);
-    });
-    document.getElementById('currencyLabel').textContent = code;
-    document.querySelectorAll('#currencyList button').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.code === code);
-    });
-    renderCart(); // keep cart totals in the same display currency
-  }
-
-  const currencyWidget = document.getElementById('currencyWidget');
-  const currencyToggle = document.getElementById('currencyToggle');
-  const currencyList = document.getElementById('currencyList');
-
-  currencyToggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    currencyWidget.classList.toggle('open');
+  document.getElementById('skipBtn').addEventListener('click', function () {
+    rememberChoice('skipped');
+    goToStore();
   });
-
-  currencyList.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      applyCurrency(btn.dataset.code);
-      currencyWidget.classList.remove('open');
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!currencyWidget.contains(e.target)) currencyWidget.classList.remove('open');
-  });
-
-  // ===================== Products =====================
-  const PRODUCTS = [
-    { id: 'noface-tee',            name: 'NoFace Tee',              category: '',      ngn: 28000, img: 'media/products/noface-tee.jpeg',            sizes: ['M','L','XL'] },
-    { id: 'one-of-one-tee',        name: 'One Of One Tee',          category: '',      ngn: 28000, img: 'media/products/one-of-one-tee.jpeg',        sizes: ['M','L','XL'] },
-    { id: 'quarter-zip',           name: 'LB Quarter-Zip',          category: '', ngn: 31000, img: 'media/products/quarter-zip.jpeg',           sizes: ['M','L','XL'] },
-    { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt',   category: '', ngn: 31000, img: 'media/products/one-of-one-sweatshirt.jpeg', sizes: ['M','L','XL'] },
-    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',        category: '',      ngn: 41000, img: 'media/products/two-piece-grey.jpeg',        sizes: ['M','L','XL'] },
-    { id: 'two-piece-black',       name: 'Two-Piece (Black)',       category: '',      ngn: 41000, img: 'media/products/two-piece-black.jpeg',       sizes: ['M','L','XL'] },
-     { id: 'noface-tee-white',       name: 'Noface Tee (White)',       category: '',      ngn: 28000, img: 'media/products/noface-tee-white.jpeg',       sizes: ['M','L','XL'] },
-      { id: 'one-of-one-tee-black',       name: 'One of One Tee (Black)',       category: '',      ngn: 28000, img: 'media/products/one-of-one-tee-black.jpeg',       sizes: ['M','L','XL'] },
-       { id: 'one-of-one-tee-grey',       name: 'One of One Tee (Grey)',       category: '',      ngn: 41000, img: 'media/products/one-of-one-tee-grey.jpeg',       sizes: ['M','L','XL'] },
-  ];
-
-  function productById(id) { return PRODUCTS.find(p => p.id === id); }
-
-  function renderProducts() {
-    const grid = document.getElementById('merchGrid');
-    grid.innerHTML = PRODUCTS.map((p, i) => `
-      <div class="tile">
-        <div class="tile-top"><span>${p.category}</span><span>${String(i+1).padStart(2,'0')}</span></div>
-        <div class="tile-icon">
-          <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="tile-icon-fallback">
-            <svg viewBox="0 0 24 24"><path d="M8 3l4 2 4-2 3 4-3 2v11H5V9L2 7l3-4Z"/></svg>
-            <span>ADD PRODUCT PHOTO</span>
-          </div>
-        </div>
-        <div class="tile-name">${p.name}</div>
-        <div class="tile-bottom">
-          <span class="tile-price" data-ngn="${p.ngn}">${formatPrice(p.ngn, activeCurrency)}</span>
-        </div>
-        <div class="tile-cart-row">
-          <select class="size-select" id="size-${p.id}">
-            ${p.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
-          </select>
-          <button class="add-cart-btn" data-id="${p.id}">Add to Cart</button>
-        </div>
-      </div>
-    `).join('');
-
-    grid.querySelectorAll('.add-cart-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const size = document.getElementById(`size-${id}`).value;
-        addToCart(id, size);
-        btn.textContent = 'Added ✓';
-        btn.classList.add('added');
-        setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1200);
-      });
-    });
-  }
-  renderProducts();
-
-  // ===================== Cart =====================
-  function loadCart() {
-    try { return JSON.parse(localStorage.getItem('lb_cart') || '[]'); }
-    catch (e) { return []; }
-  }
-  function saveCart(cart) {
-    localStorage.setItem('lb_cart', JSON.stringify(cart));
-  }
-  let cart = loadCart();
-
-  function addToCart(id, size) {
-    const existing = cart.find(item => item.id === id && item.size === size);
-    if (existing) existing.qty += 1;
-    else cart.push({ id, size, qty: 1 });
-    saveCart(cart);
-    renderCart();
-  }
-  function updateQty(index, delta) {
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    saveCart(cart);
-    renderCart();
-  }
-  function removeItem(index) {
-    cart.splice(index, 1);
-    saveCart(cart);
-    renderCart();
-  }
-  function cartSubtotalNgn() {
-    return cart.reduce((sum, item) => {
-      const p = productById(item.id);
-      return sum + (p ? p.ngn * item.qty : 0);
-    }, 0);
-  }
-
-  function renderCart() {
-    const itemsEl = document.getElementById('cartItems');
-    const summaryEl = document.getElementById('cartSummary');
-    const countEl = document.getElementById('cartCount');
-    const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-
-    countEl.textContent = totalQty;
-    countEl.classList.toggle('zero', totalQty === 0);
-
-    if (cart.length === 0) {
-      itemsEl.innerHTML = '<div class="cart-empty">Your cart is empty.</div>';
-      summaryEl.style.display = 'none';
-      return;
-    }
-
-    itemsEl.innerHTML = cart.map((item, idx) => {
-      const p = productById(item.id);
-      if (!p) return '';
-      return `
-        <div class="cart-item">
-          <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';">
-          <div class="cart-item-info">
-            <div class="cart-item-name">${p.name}</div>
-            <div class="cart-item-meta">SIZE ${item.size} · ${formatPrice(p.ngn, activeCurrency)}</div>
-            <div class="cart-item-row">
-              <div class="qty-controls">
-                <button data-action="dec" data-idx="${idx}">–</button>
-                <span>${item.qty}</span>
-                <button data-action="inc" data-idx="${idx}">+</button>
-              </div>
-              <span class="cart-item-remove" data-action="remove" data-idx="${idx}">Remove</span>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
-
-    itemsEl.querySelectorAll('[data-action]').forEach(el => {
-      el.addEventListener('click', () => {
-        const idx = Number(el.dataset.idx);
-        if (el.dataset.action === 'inc') updateQty(idx, 1);
-        if (el.dataset.action === 'dec') updateQty(idx, -1);
-        if (el.dataset.action === 'remove') removeItem(idx);
-      });
-    });
-
-    summaryEl.style.display = 'block';
-    document.getElementById('cartSubtotalAmt').textContent = formatPrice(cartSubtotalNgn(), activeCurrency);
-  }
-  renderCart();
-
-  // ===================== Cart panel open/close =====================
-  const cartPanel = document.getElementById('cartPanel');
-  const cartScrim = document.getElementById('cartScrim');
-  const cartListView = document.getElementById('cartListView');
-  const checkoutFormView = document.getElementById('checkoutFormView');
-  const cartConfirmView = document.getElementById('cartConfirmView');
-
-  function openCart() {
-    cartPanel.classList.add('open');
-    cartScrim.classList.add('open');
-  }
-  function closeCart() {
-    cartPanel.classList.remove('open');
-    cartScrim.classList.remove('open');
-  }
-  function showListView() {
-    cartListView.style.display = 'block';
-    checkoutFormView.style.display = 'none';
-    cartConfirmView.style.display = 'none';
-  }
-  function showCheckoutView() {
-    cartListView.style.display = 'none';
-    checkoutFormView.style.display = 'block';
-    cartConfirmView.style.display = 'none';
-    updateCheckoutTotals();
-  }
-  function showConfirmView(ref) {
-    cartListView.style.display = 'none';
-    checkoutFormView.style.display = 'none';
-    cartConfirmView.style.display = 'block';
-    document.getElementById('confirmRef').textContent = ref ? `REF: ${ref}` : '';
-  }
-
-  document.getElementById('cartBtn').addEventListener('click', () => { showListView(); openCart(); });
-  document.getElementById('cartClose').addEventListener('click', closeCart);
-  document.getElementById('cartClose2').addEventListener('click', closeCart);
-  document.getElementById('cartClose3').addEventListener('click', closeCart);
-  cartScrim.addEventListener('click', closeCart);
-  document.getElementById('backToCart').addEventListener('click', showListView);
-
-  document.getElementById('goToCheckout').addEventListener('click', (e) => {
-    e.preventDefault();
-    if (cart.length === 0) return;
-    showCheckoutView();
-  });
-
-  const shippingSelect = document.getElementById('shippingSelect');
-  shippingSelect.addEventListener('change', updateCheckoutTotals);
-
-  function updateCheckoutTotals() {
-    const subtotalNgn = cartSubtotalNgn();
-    const shippingNgn = shippingSelect.value === 'international' ? SHIPPING.international : SHIPPING.domestic;
-    const totalNgn = subtotalNgn + shippingNgn;
-    document.getElementById('checkoutSubtotal').textContent = formatPrice(subtotalNgn, activeCurrency);
-    document.getElementById('checkoutShipping').textContent = formatPrice(shippingNgn, activeCurrency);
-    document.getElementById('checkoutTotal').textContent = formatPrice(totalNgn, activeCurrency);
-    return { subtotalNgn, shippingNgn, totalNgn };
-  }
-
-  // ===================== Checkout / Paystack =====================
-  document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById('custName').value.trim();
-    const email = document.getElementById('custEmail').value.trim();
-    const phone = document.getElementById('custPhone').value.trim();
-    const address = document.getElementById('custAddress').value.trim();
-    if (!name || !email || !phone || !address) return;
-
-    const { totalNgn } = updateCheckoutTotals();
-
-    if (!PAYSTACK_PUBLIC_KEY) {
-      alert('Add your Paystack public key (PAYSTACK_PUBLIC_KEY) in the code to accept payment. See the CONFIG comment near the top of the script.');
-      return;
-    }
-
-    const payBtn = document.getElementById('payBtn');
-    payBtn.textContent = 'Opening secure payment…';
-
-    const handler = PaystackPop.setup({
-      key: PAYSTACK_PUBLIC_KEY,
-      email: email,
-      amount: Math.round(totalNgn * 100), // Paystack expects kobo
-      currency: 'NGN',
-      ref: 'LB_' + Date.now(),
-      metadata: {
-        custom_fields: [
-          { display_name: "Full Name", variable_name: "full_name", value: name },
-          { display_name: "Phone", variable_name: "phone", value: phone },
-          { display_name: "Delivery Address", variable_name: "address", value: address },
-          { display_name: "Shipping", variable_name: "shipping", value: shippingSelect.value },
-          { display_name: "Cart", variable_name: "cart", value: JSON.stringify(cart) }
-        ]
-      },
-      callback: function (response) {
-        cart = [];
-        saveCart(cart);
-        renderCart();
-        showConfirmView(response.reference);
-        payBtn.textContent = 'Pay Now — Card or Bank Transfer';
-      },
-      onClose: function () {
-        payBtn.textContent = 'Pay Now — Card or Bank Transfer';
-      }
-    });
-    handler.openIframe();
-  });
-
-  // ===================== Page router =====================
-  // Home, Merch, About, and Contact are standalone pages — reached only by clicking
-  // Shop Merch, a nav link, or a menu link, never by scrolling between them.
-  const PAGES = ['home', 'merch', 'about', 'contact'];
-
-  function showPage(id) {
-    if (!PAGES.includes(id)) id = 'home';
-    PAGES.forEach(p => {
-      const el = document.getElementById('page-' + p);
-      if (el) el.classList.toggle('active', p === id);
-    });
-    window.scrollTo(0, 0);
-    history.replaceState(null, '', id === 'home' ? '#top' : '#' + id);
-  }
-
-  document.querySelectorAll('a[data-page]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      showPage(a.dataset.page);
-      closeMenu();
-    });
-  });
-
-  // Land on whichever page the URL hash points to (default: home)
-  const initialHash = window.location.hash.replace('#', '');
-  const initialPage = initialHash === 'top' || initialHash === '' ? 'home' : initialHash;
-  showPage(initialPage);
-
-  // Slide menu
-  const menuBtn = document.getElementById('menuBtn');
-  const menuPanel = document.getElementById('menuPanel');
-  const menuClose = document.getElementById('menuClose');
-  const scrim = document.getElementById('scrim');
-
-  function openMenu(){ menuPanel.classList.add('open'); scrim.classList.add('open'); }
-  function closeMenu(){ menuPanel.classList.remove('open'); scrim.classList.remove('open'); }
-
-  menuBtn.addEventListener('click', openMenu);
-  menuClose.addEventListener('click', closeMenu);
-  scrim.addEventListener('click', closeMenu);
-  menuPanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 </script>
 
 </body>

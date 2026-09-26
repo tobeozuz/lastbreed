@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* =====================================================================
+     Blue sampled directly from the uploaded Windows 1.01 boot-screen photo
+     (#0100f6). Change --bg below if you want a different shade.
+  ===================================================================== */
+  :root{
+    --bg:#0100f6;
+    --fg:#ffffff;
+    --fg-dim:rgba(255,255,255,0.7);
+    --line:rgba(255,255,255,0.25);
+    --card:#ffffff;
+    --card-text:#0a0a0a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  img{display:block;max-width:100%;}
+
+  /* ===== Header ===== */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:28px 32px;
+    border-bottom:1px solid var(--line);
+  }
+  .wordmark{font-size:20px;font-weight:700;letter-spacing:0.02em;}
+  .cart-btn{
+    display:flex;align-items:center;gap:8px;
+    font-size:14px;font-weight:500;
+    padding:10px 16px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    position:relative;
+  }
+  .cart-btn:hover{border-color:var(--fg);}
+  .cart-btn svg{width:16px;height:16px;stroke:var(--fg);fill:none;}
+  .cart-count{
+    background:var(--fg);color:var(--bg);
+    font-size:11px;font-weight:700;
+    min-width:18px;height:18px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    padding:0 4px;
+  }
+  .cart-count.zero{display:none;}
+
+  /* ===== Hero strip (plain, minimal) ===== */
+  .hero-strip{
+    text-align:center;
+    padding:56px 24px 40px;
+  }
+  .hero-strip h1{
+    font-size:clamp(1.6rem, 4vw, 2.6rem);
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  .hero-strip p{
+    margin-top:10px;
+    font-size:14px;
+    color:var(--fg-dim);
+  }
+
+  /* ===== Product grid: full-bleed images, no borders, no cards ===== */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 8px 100px;
+  }
+  .product{
+    display:flex;flex-direction:column;
+    padding:8px;
+    cursor:pointer;
+    background:none;
+    text-align:left;
+  }
+  .product img{
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    transition:opacity .2s ease;
+  }
+  .product:hover img{opacity:0.88;}
+  .product-fallback{
+    width:100%;aspect-ratio:4/5;
+    display:none;
+    align-items:center;justify-content:center;
+    flex-direction:column;gap:8px;
+    border:1px dashed rgba(255,255,255,0.4);
+    color:rgba(255,255,255,0.6);
+    font-size:11px;letter-spacing:0.08em;
+    text-align:center;padding:12px;
+  }
+  .product-fallback svg{width:32px;height:32px;stroke:rgba(255,255,255,0.5);fill:none;}
+  .product-info{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-top:12px;
+    font-size:14px;
+  }
+  .product-name{font-weight:500;}
+  .product-price{font-weight:600;white-space:nowrap;margin-left:12px;}
+
+  /* ===== Modal shared ===== */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(1,0,60,0.55);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:90;
+    padding:20px;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    background:var(--card);
+    color:var(--card-text);
+    width:100%;max-width:420px;
+    padding:28px;
+    position:relative;
+    max-height:90vh;
+    overflow-y:auto;
+  }
+  .modal-close{
+    position:absolute;top:18px;right:18px;
+    font-size:13px;color:#888;
+  }
+  .modal-close:hover{color:#000;}
+
+  /* Quick-add modal */
+  .qa-img{width:100%;aspect-ratio:4/5;object-fit:cover;margin-bottom:18px;}
+  .qa-name{font-size:18px;font-weight:700;}
+  .qa-price{font-size:15px;color:#555;margin-top:4px;}
+  .field{margin-top:16px;}
+  .field label{display:block;font-size:12px;color:#666;margin-bottom:6px;letter-spacing:0.04em;text-transform:uppercase;}
+  .field select, .field input, .field textarea{
+    width:100%;padding:11px 12px;
+    border:1px solid #ddd;
+    font-family:'Inter',sans-serif;font-size:14px;
+    background:#fff;color:#0a0a0a;
+  }
+  .qty-row{display:flex;align-items:center;gap:14px;margin-top:16px;}
+  .qty-row button{
+    width:32px;height:32px;border:1px solid #ddd;font-size:16px;
+  }
+  .qty-row span{font-size:15px;min-width:20px;text-align:center;}
+
+  .primary-btn{
+    margin-top:22px;width:100%;
+    background:var(--bg);color:#fff;
+    padding:14px;font-size:14px;font-weight:600;
+    letter-spacing:0.03em;text-transform:uppercase;
+    transition:opacity .2s ease;
+  }
+  .primary-btn:hover{opacity:0.85;}
+  .primary-btn:disabled{background:#ccc;cursor:not-allowed;}
+
+  /* ===== Floating cart summary ===== */
+  .floating-cart{
+    position:fixed;bottom:24px;right:24px;
+    background:#fff;color:#0a0a0a;
+    padding:16px 20px;
+    display:none;
+    align-items:center;gap:18px;
+    z-index:80;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    max-width:90vw;
+  }
+  .floating-cart.show{display:flex;}
+  .fc-info{font-size:13px;line-height:1.5;}
+  .fc-info b{font-size:14px;}
+  .fc-checkout-btn{
+    background:var(--bg);color:#fff;
+    padding:10px 18px;font-size:13px;font-weight:600;
+    letter-spacing:0.03em;text-transform:uppercase;
+    white-space:nowrap;
+  }
+
+  /* Checkout modal specifics */
+  .checkout-items{margin-bottom:16px;border-bottom:1px solid #eee;padding-bottom:12px;}
+  .checkout-line{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;}
+  .checkout-line .rm{color:#b00;cursor:pointer;font-size:11px;margin-left:8px;}
+  .checkout-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;}
+  .pay-note{font-size:11px;color:#888;margin-top:12px;line-height:1.6;}
+
+  .confirm-view{text-align:center;padding:20px 0;}
+  .confirm-view .tick{font-size:36px;color:var(--bg);margin-bottom:12px;}
+  .confirm-view h3{font-size:18px;font-weight:700;margin-bottom:8px;}
+  .confirm-view p{font-size:13px;color:#666;line-height:1.6;}
+  .confirm-ref{font-size:12px;color:#999;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="wordmark">STORE</span>
+  <button class="cart-btn" id="cartBtn">
+    <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+    Cart
+    <span class="cart-count zero" id="cartCount">0</span>
+  </button>
+</header>
+
+<div class="hero-strip">
+  <h1>Everything, plainly.</h1>
+  <p>Tap a piece to add it — checkout takes about a minute.</p>
+</div>
+
+<div class="grid" id="productGrid"></div>
+
+<!-- Quick-add modal -->
+<div class="overlay" id="qaOverlay">
+  <div class="modal">
+    <span class="modal-close" id="qaClose">CLOSE ✕</span>
+    <img class="qa-img" id="qaImg" src="" alt="" onerror="this.style.display='none';">
+    <div class="qa-name" id="qaName"></div>
+    <div class="qa-price" id="qaPrice"></div>
+
+    <div class="field" id="qaSizeField">
+      <label>Size</label>
+      <select id="qaSize"></select>
+    </div>
+
+    <div class="field">
+      <label>Quantity</label>
+      <div class="qty-row">
+        <button type="button" id="qaMinus">–</button>
+        <span id="qaQty">1</span>
+        <button type="button" id="qaPlus">+</button>
+      </div>
+    </div>
+
+    <button class="primary-btn" id="qaAddBtn">Add to Cart</button>
+  </div>
+</div>
+
+<!-- Checkout modal -->
+<div class="overlay" id="coOverlay">
+  <div class="modal">
+    <span class="modal-close" id="coClose">CLOSE ✕</span>
+
+    <div id="coFormView">
+      <div class="qa-name" style="margin-bottom:14px;">Checkout</div>
+
+      <div class="checkout-items" id="checkoutItems"></div>
+      <div class="checkout-total"><span>Total</span><span id="checkoutTotal">₦0</span></div>
+
+      <form id="checkoutForm">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="custName" required>
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="custEmail" required>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="custPhone" required>
+        </div>
+        <div class="field">
+          <label>Delivery Address</label>
+          <textarea id="custAddress" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="primary-btn" id="payBtn">Pay Now</button>
+        <p class="pay-note">Test mode — no real charge will be made while a pk_test_ key is set below. Swap in your pk_live_ key when you're ready to accept real payments.</p>
+      </form>
+    </div>
+
+    <div id="coConfirmView" style="display:none;">
+      <div class="confirm-view">
+        <div class="tick">✓</div>
+        <h3>Order Placed</h3>
+        <p>Thanks — your order has been received.<br>A confirmation has been sent to your email.</p>
+        <div class="confirm-ref" id="confirmRef"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="floating-cart" id="floatingCart">
+  <div class="fc-info" id="fcSummary"></div>
+  <button class="fc-checkout-btn" id="fcCheckoutBtn">Checkout</button>
+</div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+  // ===================== CONFIG =====================
+  // Use a pk_test_ key here first to run full test payments (Paystack gives you a
+  // test card number in their docs — no real money moves). Swap to your pk_live_
+  // key only once you're ready to accept real payments.
+  const PAYSTACK_PUBLIC_KEY = ""; // e.g. "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  const CURRENCY = "NGN";
+
+  // ===================== Placeholder catalog =====================
+  // Swapped in from the Last Breed product list already in progress, so this
+  // template previews with real names/prices instead of "Product 1, Product 2".
+  // Point each img at your actual product photo (same media/products/ folder
+  // your main site uses) — until then a plain dashed box shows instead.
+  const PRODUCTS = [
+    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee.jpeg',            sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee.jpeg',        sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-tee-black',  name: 'One Of One Tee (Black)',ngn: 28000, img: 'media/products/one-of-one-tee-black.jpeg',  sizes: ['S','M','L','XL'] },
+    { id: 'quarter-zip',           name: 'LB Quarter-Zip',        ngn: 31000, img: 'media/products/quarter-zip.jpeg',           sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt', ngn: 31000, img: 'media/products/one-of-one-sweatshirt.jpeg', sizes: ['S','M','L','XL'] },
+    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',      ngn: 41000, img: 'media/products/two-piece-grey.jpeg',        sizes: ['S','M','L','XL'] },
+    { id: 'two-piece-black',       name: 'Two-Piece (Black)',     ngn: 41000, img: 'media/products/two-piece-black.jpeg',       sizes: ['S','M','L','XL'] },
+  ];
+  // ====================================================
+
+  function fmt(n) { return '₦' + Math.round(n).toLocaleString(); }
+
+  function renderProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = PRODUCTS.map(p => `
+      <button class="product" data-id="${p.id}">
+        <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="product-fallback">
+          <svg viewBox="0 0 24 24"><path d="M8 3l4 2 4-2 3 4-3 2v11H5V9L2 7l3-4Z"/></svg>
+          ADD PRODUCT PHOTO
+        </div>
+        <div class="product-info">
+          <span class="product-name">${p.name}</span>
+          <span class="product-price">${fmt(p.ngn)}</span>
+        </div>
+      </button>
+    `).join('');
+    grid.querySelectorAll('.product').forEach(el => {
+      el.addEventListener('click', () => openQuickAdd(el.dataset.id));
+    });
+  }
+  renderProducts();
+
+  // ===================== Cart =====================
+  function loadCart() { try { return JSON.parse(localStorage.getItem('store_cart') || '[]'); } catch (e) { return []; } }
+  function saveCart(c) { localStorage.setItem('store_cart', JSON.stringify(c)); }
+  let cart = loadCart();
+
+  function productById(id) { return PRODUCTS.find(p => p.id === id); }
+
+  function cartTotal() {
+    return cart.reduce((sum, line) => sum + productById(line.id).ngn * line.qty, 0);
+  }
+  function cartCount() {
+    return cart.reduce((sum, line) => sum + line.qty, 0);
+  }
+
+  function renderFloatingCart() {
+    const fc = document.getElementById('floatingCart');
+    const count = cartCount();
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('cartCount').classList.toggle('zero', count === 0);
+    if (count > 0) {
+      fc.classList.add('show');
+      document.getElementById('fcSummary').innerHTML = `<b>${count} item${count > 1 ? 's' : ''}</b><br>${fmt(cartTotal())}`;
+    } else {
+      fc.classList.remove('show');
+    }
+  }
+
+  // ===================== Quick-add modal =====================
+  const qaOverlay = document.getElementById('qaOverlay');
+  let qaProduct = null;
+  let qaQty = 1;
+
+  function openQuickAdd(id) {
+    qaProduct = productById(id);
+    qaQty = 1;
+    document.getElementById('qaImg').src = qaProduct.img;
+    document.getElementById('qaImg').style.display = 'block';
+    document.getElementById('qaName').textContent = qaProduct.name;
+    document.getElementById('qaPrice').textContent = fmt(qaProduct.ngn);
+    document.getElementById('qaQty').textContent = qaQty;
+
+    const sizeField = document.getElementById('qaSizeField');
+    const sizeSelect = document.getElementById('qaSize');
+    if (qaProduct.sizes && qaProduct.sizes.length) {
+      sizeField.style.display = 'block';
+      sizeSelect.innerHTML = qaProduct.sizes.map(s => `<option value="${s}">${s}</option>`).join('');
+    } else {
+      sizeField.style.display = 'none';
+    }
+    qaOverlay.classList.add('open');
+  }
+  function closeQuickAdd() { qaOverlay.classList.remove('open'); }
+
+  document.getElementById('qaClose').addEventListener('click', closeQuickAdd);
+  qaOverlay.addEventListener('click', (e) => { if (e.target === qaOverlay) closeQuickAdd(); });
+
+  document.getElementById('qaMinus').addEventListener('click', () => {
+    qaQty = Math.max(1, qaQty - 1);
+    document.getElementById('qaQty').textContent = qaQty;
+  });
+  document.getElementById('qaPlus').addEventListener('click', () => {
+    qaQty += 1;
+    document.getElementById('qaQty').textContent = qaQty;
+  });
+
+  document.getElementById('qaAddBtn').addEventListener('click', () => {
+    const size = qaProduct.sizes && qaProduct.sizes.length ? document.getElementById('qaSize').value : null;
+    const existing = cart.find(l => l.id === qaProduct.id && l.size === size);
+    if (existing) existing.qty += qaQty;
+    else cart.push({ id: qaProduct.id, size, qty: qaQty });
+    saveCart(cart);
+    renderFloatingCart();
+    closeQuickAdd();
+  });
+
+  // ===================== Floating cart -> checkout =====================
+  document.getElementById('cartBtn').addEventListener('click', openCheckout);
+  document.getElementById('fcCheckoutBtn').addEventListener('click', openCheckout);
+
+  const coOverlay = document.getElementById('coOverlay');
+  const coFormView = document.getElementById('coFormView');
+  const coConfirmView = document.getElementById('coConfirmView');
+
+  function openCheckout() {
+    if (cart.length === 0) return;
+    coFormView.style.display = 'block';
+    coConfirmView.style.display = 'none';
+    renderCheckoutItems();
+    coOverlay.classList.add('open');
+  }
+  function closeCheckout() { coOverlay.classList.remove('open'); }
+  document.getElementById('coClose').addEventListener('click', closeCheckout);
+  coOverlay.addEventListener('click', (e) => { if (e.target === coOverlay) closeCheckout(); });
+
+  function renderCheckoutItems() {
+    const el = document.getElementById('checkoutItems');
+    el.innerHTML = cart.map((l, idx) => {
+      const p = productById(l.id);
+      return `<div class="checkout-line">
+        <span>${p.name}${l.size ? ' (' + l.size + ')' : ''} × ${l.qty}</span>
+        <span>${fmt(p.ngn * l.qty)} <span class="rm" data-idx="${idx}">remove</span></span>
+      </div>`;
+    }).join('');
+    el.querySelectorAll('.rm').forEach(rm => {
+      rm.addEventListener('click', () => {
+        cart.splice(Number(rm.dataset.idx), 1);
+        saveCart(cart);
+        renderFloatingCart();
+        renderCheckoutItems();
+        if (cart.length === 0) closeCheckout();
+      });
+    });
+    document.getElementById('checkoutTotal').textContent = fmt(cartTotal());
+  }
+
+  document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('custName').value.trim();
+    const email = document.getElementById('custEmail').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    if (!name || !email || !phone || !address) return;
+
+    if (!PAYSTACK_PUBLIC_KEY) {
+      alert('Add a Paystack public key (PAYSTACK_PUBLIC_KEY) at the top of the script first — a pk_test_ key is fine for testing.');
+      return;
+    }
+
+    const total = cartTotal();
+    const payBtn = document.getElementById('payBtn');
+    payBtn.textContent = 'Opening secure payment…';
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: Math.round(total * 100), // Paystack expects kobo
+      currency: CURRENCY,
+      ref: 'ORD_' + Date.now(),
+      metadata: {
+        custom_fields: [
+          { display_name: "Full Name", variable_name: "full_name", value: name },
+          { display_name: "Phone", variable_name: "phone", value: phone },
+          { display_name: "Delivery Address", variable_name: "address", value: address },
+          { display_name: "Cart", variable_name: "cart", value: JSON.stringify(cart) }
+        ]
+      },
+      callback: function (response) {
+        cart = [];
+        saveCart(cart);
+        renderFloatingCart();
+        coFormView.style.display = 'none';
+        coConfirmView.style.display = 'block';
+        document.getElementById('confirmRef').textContent = 'REF: ' + response.reference;
+        payBtn.textContent = 'Pay Now';
+      },
+      onClose: function () {
+        payBtn.textContent = 'Pay Now';
+      }
+    });
+    handler.openIframe();
+  });
+
+  renderFloatingCart();
+</script>
+
+</body>
+</html>

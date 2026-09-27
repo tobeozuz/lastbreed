@@ -61,16 +61,12 @@
   .hero-strip{
     text-align:center;
     padding:56px 24px 40px;
+    display:flex;
+    justify-content:center;
   }
-  .hero-strip h1{
-    font-size:clamp(1.6rem, 4vw, 2.6rem);
-    font-weight:700;
-    letter-spacing:-0.01em;
-  }
-  .hero-strip p{
-    margin-top:10px;
-    font-size:14px;
-    color:var(--fg-dim);
+  .hero-logo{
+    width:180px;
+    height:auto;
   }
 
   /* ===== Product grid: full-bleed images, no borders, no cards ===== */
@@ -207,13 +203,17 @@
 <body>
 
 <header>
- 
+  <span class="wordmark">STORE</span>
   <button class="cart-btn" id="cartBtn">
     <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
     Cart
     <span class="cart-count zero" id="cartCount">0</span>
   </button>
 </header>
+
+<div class="hero-strip">
+  <img src="media/lastbreed-logo.png" alt="Last Breed" class="hero-logo">
+</div>
 
 <div class="grid" id="productGrid"></div>
 
@@ -307,8 +307,8 @@
   // Point each img at your actual product photo (same media/products/ folder
   // your main site uses) — until then a plain dashed box shows instead.
   const PRODUCTS = [
-    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee-v2-nobg.png',            sizes: ['S','M','L','XL'] },
-    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-back-nobg.png',        sizes: ['S','M','L','XL'] },
+    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee-nobg.png',            sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-nobg.png',        sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-tee-black',  name: 'One Of One Tee (Black)',ngn: 28000, img: 'media/products/one-of-one-tee-black-nobg.png',  sizes: ['S','M','L','XL'] },
     { id: 'quarter-zip',           name: 'LB Quarter-Zip',        ngn: 31000, img: 'media/products/quarter-zip-nobg.png',           sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt', ngn: 31000, img: 'media/products/one-of-one-sweatshirt-nobg.png', sizes: ['S','M','L','XL'] },

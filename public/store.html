@@ -82,11 +82,11 @@
     padding:0 8px 100px;
   }
   .product{
-    display:flex;flex-direction:column;
+    display:flex;flex-direction:column;align-items:center;
     padding:8px;
     cursor:pointer;
     background:none;
-    text-align:left;
+    text-align:center;
   }
   .product img{
     width:100%;
@@ -108,12 +108,13 @@
   }
   .product-fallback svg{width:32px;height:32px;stroke:rgba(255,255,255,0.5);fill:none;}
   .product-info{
-    display:flex;justify-content:space-between;align-items:baseline;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
     margin-top:12px;
     font-size:14px;
+    width:100%;
   }
-  .product-name{font-weight:500;}
-  .product-price{font-weight:600;white-space:nowrap;margin-left:12px;}
+  .product-name{font-weight:500;text-align:center;}
+  .product-price{font-weight:600;white-space:nowrap;}
 
   /* ===== Modal shared ===== */
   .overlay{
@@ -311,8 +312,8 @@
   // Point each img at your actual product photo (same media/products/ folder
   // your main site uses) — until then a plain dashed box shows instead.
   const PRODUCTS = [
-    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee-v2-nobg.png',            sizes: ['S','M','L','XL'] },
-    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-back-nobg.png',        sizes: ['S','M','L','XL'] },
+    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee-nobg.png',            sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-nobg.png',        sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-tee-black',  name: 'One Of One Tee (Black)',ngn: 28000, img: 'media/products/one-of-one-tee-black-nobg.png',  sizes: ['S','M','L','XL'] },
     { id: 'quarter-zip',           name: 'LB Quarter-Zip',        ngn: 31000, img: 'media/products/quarter-zip-nobg.png',           sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt', ngn: 31000, img: 'media/products/one-of-one-sweatshirt-nobg.png', sizes: ['S','M','L','XL'] },

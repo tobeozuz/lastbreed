@@ -73,19 +73,25 @@
 =========================================================================== -->
 <script>
   function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return match ? decodeURIComponent(match[2]) : null;
+    try {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+    } catch (e) { return null; }
   }
-  const alreadyDecided = getCookie('lb_mailing_status') || localStorage.getItem('lb_mailing_status');
-  if (alreadyDecided) {
+  function getSavedChoice() {
+    let v = getCookie('lb_mailing_status');
+    if (v) return v;
+    try { return localStorage.getItem('lb_mailing_status'); } catch (e) { return null; }
+  }
+  if (getSavedChoice()) {
     window.location.replace('store.html');
   }
 </script>
 
 <div class="wrap">
-  <img src="media/lastbreed-logo.jpeg" alt="Last Breed" class="brand-logo">
+  <img src="media/lastbreed-logo.png" alt="Last Breed" class="brand-logo">
   <h1>Mailing List</h1>
-
+  <p class="sub">Get early word on drops before anyone else. One email, no spam.</p>
 
   <form id="signupForm">
     <input type="email" id="emailInput" placeholder="you@email.com" required>
@@ -111,8 +117,12 @@
   // ====================================================
 
   function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    try {
+      const expires = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+    } catch (e) {
+      console.warn('Could not set cookie (some in-app browsers block this) — continuing anyway.', e);
+    }
   }
 
   function goToStore() {
@@ -121,7 +131,9 @@
 
   function rememberChoice(status) {
     setCookie('lb_mailing_status', status, 365);
-    try { localStorage.setItem('lb_mailing_status', status); } catch (e) {}
+    try { localStorage.setItem('lb_mailing_status', status); } catch (e) {
+      console.warn('Could not use localStorage (some in-app browsers block this) — continuing anyway.', e);
+    }
   }
 
   document.getElementById('signupForm').addEventListener('submit', function (e) {

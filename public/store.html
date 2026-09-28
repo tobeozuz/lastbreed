@@ -70,12 +70,23 @@
   }
 
   /* ===== Product grid: full-bleed images, no borders, no cards ===== */
+  /* Same 5-across layout on desktop AND mobile (minmax(0,1fr) lets columns shrink instead of overflowing) */
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns:repeat(5, minmax(0, 1fr));
     max-width:1280px;
     margin:0 auto;
     padding:0 8px 100px;
+  }
+  @media (max-width:700px){
+    .grid{padding:0 4px 90px;}
+    .product{padding:3px !important;}
+    .product img{padding:2px !important;}
+    .product-info{margin-top:6px !important;gap:2px !important;font-size:clamp(8.5px, 2.5vw, 12px) !important;}
+    .product-name{line-height:1.25;}
+    header{padding:20px 16px !important;}
+    .hero-strip{padding:32px 16px 28px !important;}
+    .hero-logo{width:120px !important;}
   }
   .product{
     display:flex;flex-direction:column;align-items:center;
@@ -203,7 +214,6 @@
 <body>
 
 <header>
-  <span class="wordmark">STORE</span>
   <button class="cart-btn" id="cartBtn">
     <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
     Cart
@@ -272,7 +282,7 @@
           <textarea id="custAddress" rows="3" required></textarea>
         </div>
         <button type="submit" class="primary-btn" id="payBtn">Pay Now</button>
-        <p class="pay-note">Test mode — no real charge will be made while a pk_test_ key is set below. Swap in your pk_live_ key when you're ready to accept real payments.</p>
+        <p class="pay-note">Secure checkout by Paystack — pay by card or bank transfer.</p>
       </form>
     </div>
 
@@ -295,25 +305,26 @@
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
   // ===================== CONFIG =====================
-  // Use a pk_test_ key here first to run full test payments (Paystack gives you a
-  // test card number in their docs — no real money moves). Swap to your pk_live_
-  // key only once you're ready to accept real payments.
-  const PAYSTACK_PUBLIC_KEY = ""; // e.g. "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  // Paystack PUBLIC key (safe to put in the page; never put a secret sk_ key here).
+  // This is the same pk_live_ key your earlier Last Breed store used, so any order
+  // placed here is a REAL charge to a real card/bank account.
+  const PAYSTACK_PUBLIC_KEY = "pk_live_c88909148ec15f2069b637b23c5e85adb01db726";
   const CURRENCY = "NGN";
 
-  // ===================== Placeholder catalog =====================
-  // Swapped in from the Last Breed product list already in progress, so this
-  // template previews with real names/prices instead of "Product 1, Product 2".
-  // Point each img at your actual product photo (same media/products/ folder
-  // your main site uses) — until then a plain dashed box shows instead.
+  // ===================== Catalog =====================
+  // Prices are in naira. Images live in media/products/.
   const PRODUCTS = [
-    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 28000, img: 'media/products/noface-tee-v2-nobg.png',            sizes: ['S','M','L','XL'] },
-    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-back-nobg.png',        sizes: ['S','M','L','XL'] },
+    // TEMP TEST PRICE: NoFace Tee is set to 5,000 so you can run a cheap real payment test.
+    // Change 5000 back to 28000 when you're done testing.
+    { id: 'noface-tee',            name: 'NoFace Tee',            ngn: 5000,  img: 'media/products/noface-tee-nobg.png',            sizes: ['S','M','L','XL'] },
+    { id: 'one-of-one-tee',        name: 'One Of One Tee (White)',ngn: 28000, img: 'media/products/one-of-one-tee-nobg.png',        sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-tee-black',  name: 'One Of One Tee (Black)',ngn: 28000, img: 'media/products/one-of-one-tee-black-nobg.png',  sizes: ['S','M','L','XL'] },
     { id: 'quarter-zip',           name: 'LB Quarter-Zip',        ngn: 31000, img: 'media/products/quarter-zip-nobg.png',           sizes: ['S','M','L','XL'] },
     { id: 'one-of-one-sweatshirt', name: 'One Of One Sweatshirt', ngn: 31000, img: 'media/products/one-of-one-sweatshirt-nobg.png', sizes: ['S','M','L','XL'] },
-    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',      ngn: 41000, img: 'media/products/two-piece-grey-nobg.png',        sizes: ['S','M','L','XL'] },
-    { id: 'two-piece-black',       name: 'Two-Piece (Black)',     ngn: 41000, img: 'media/products/two-piece-black-nobg.png',       sizes: ['S','M','L','XL'] },
+    { id: 'two-piece-grey',        name: 'Two-Piece (Grey)',      ngn: 41000, img: 'media/products/two-piece-grey-v2.png',          sizes: ['S','M','L','XL'] },
+    { id: 'two-piece-black',       name: 'Two-Piece (Black)',     ngn: 41000, img: 'media/products/two-piece-black-v2.png',         sizes: ['S','M','L','XL'] },
+    { id: 'shorts-grey',           name: 'Shorts (Grey)',         ngn: 15000, img: 'media/products/shorts-grey.png',                sizes: ['S','M','L','XL'] },
+    { id: 'shorts-black',          name: 'Shorts (Black)',        ngn: 15000, img: 'media/products/shorts-black.png',               sizes: ['S','M','L','XL'] },
   ];
   // ====================================================
 
@@ -464,7 +475,7 @@
     if (!name || !email || !phone || !address) return;
 
     if (!PAYSTACK_PUBLIC_KEY) {
-      alert('Add a Paystack public key (PAYSTACK_PUBLIC_KEY) at the top of the script first — a pk_test_ key is fine for testing.');
+      alert('Payments are not set up yet — add your Paystack public key (PAYSTACK_PUBLIC_KEY) at the top of the script.');
       return;
     }
 
